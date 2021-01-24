@@ -18,6 +18,12 @@
 			"style": {
 				"navigationBarTitleText": "我"
 			}
+		},
+		{
+			"path": "pages/index/upload",
+			"style": {
+				"navigationBarTitleText": "上传"
+			}
 		}
 	],
 	"globalStyle": {
