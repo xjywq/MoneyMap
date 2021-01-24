@@ -1,7 +1,7 @@
 <template>
-	<div>
+	<div class="container">
 		<div class="container DataContainer">
-			<div class="Consum">日期</div>
+			<div class="Consum">{{$data.Date}}</div>
 			<div class="Consum">日期</div>
 		</div>
 		<div class="container ChartContainer">
@@ -29,7 +29,25 @@
 	import EchartsEl from '@/components/echarts/echarts-el.vue'
 	export default {
 		data() {
+			Date.prototype.format = function (fmt) {
+			  var o = {
+			      "M+": this.getMonth() + 1, //月份
+			      "d+": this.getDate(), //日
+			  };
+			  if (/(y+)/.test(fmt)) {
+			    fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			  }
+			  for (var k in o) {
+			    if (new RegExp("(" + k + ")").test(fmt)) {
+			      fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ?
+			        (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+			    }
+			  }
+			  return fmt;
+			}
+			var get_date = new Date()
 			return {
+				Date: (get_date).format("yyyy-MM-dd"),
 				option: {},
 				option2: {
 					notMerge: true, // 自定义变量：true代表不合并数据，比如从折线图变为柱形图则需设置为true；false或不写代表合并
@@ -100,24 +118,6 @@
 							]
 						}
 					]
-				},
-				option3: {
-					notMerge: true, // 自定义变量：true代表不合并数据，比如从折线图变为柱形图则需设置为true；false或不写代表合并
-					xAxis: {
-						type: 'category',
-						data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-					},
-					yAxis: {
-						type: 'value'
-					},
-					series: [{
-						data: [120, 200, 150, 80, 70, 110, 130],
-						type: 'bar',
-						showBackground: true,
-						backgroundStyle: {
-							color: 'rgba(220, 220, 220, 0.8)'
-						}
-					}]
 				}
 			};
 		},
@@ -140,11 +140,9 @@
 			 * 切换数据
 			 */
 			updateClick() {
-				if (this.option === this.option2) {
-					this.option = this.option3
-				} else {
-					this.option = this.option2
-				}
+				uni.showToast({
+					title: '刷新成功',
+				})
 			}
 		}
 	};
@@ -152,7 +150,7 @@
 
 <style>
 	.container {
-		background-color: #0bb1f8;
+		background-color: #52e2f8;
 		border-radius: 20rpx;
 		overflow: hidden;
 		margin-left: 50rpx;
