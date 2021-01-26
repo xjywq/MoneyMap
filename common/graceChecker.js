@@ -59,6 +59,9 @@ module.exports = {
 				case 'same':
 					if (data[rule[i].name] != rule[i].checkRule) { this.error = rule[i].errorMsg; return false;}
 				break;
+				case 'price':
+					if (data[rule[i].name] != data[rule[i].name].match(/^\d+(?:\.\d{0,2})?/) || !data[rule[i].name]) { this.error = rule[i].errorMsg; return false;}
+				break;
 				case 'notsame':
 					if (data[rule[i].name] == rule[i].checkRule) { this.error = rule[i].errorMsg; return false; }
 				break;

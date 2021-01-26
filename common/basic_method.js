@@ -1,9 +1,13 @@
 Date.prototype.format = function(fmt) {
 	var o = {
-		"M+": this.getMonth() + 1, //月份
-		"d+": this.getDate(), //日
+		"M+": this.getMonth() + 1, // 月份
+		"D+": this.getDate(), // 日
+		"h+": this.getHours(), // 小时
+		"m+": this.getMinutes(), // 分
+		"s+": this.getSeconds(), //秒
+		"q+": Math.floor((this.getMonth() + 3) / 3), // 季度
 	};
-	if (/(y+)/.test(fmt)) {
+	if (/(Y+)/.test(fmt)) {
 		fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
 	}
 	for (var k in o) {

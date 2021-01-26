@@ -1,25 +1,20 @@
 <template>
 	<div class="container">
 		<div class="container DataContainer">
-			<div class="Consum">{{$data.Date}}</div>
+			<div class="Consum">{{date}}</div>
 			<div class="Consum">日期</div>
 		</div>
 		<div class="container ChartContainer">
 			<h1 class="title">我的账单</h1>
 			<text>本月支出</text>
-			<view class="uni-flex uni-row" style="width: 100%;">
-				<view class="flex-item uni-bg-red">A</view>
-				<view class="flex-item uni-bg-green">B</view>
-				<view class="flex-item uni-bg-blue">C</view>
-			</view>
-			<view id="main" style="width: 300rpx;height:300rpx;">
+			<view id="main" class="graph">
 				<echarts :option="option" style="width: 100%; height: 100%" @click="echartsClick"></echarts>
 			</view>
-			<view id="main" style="width: 300rpx;height:300rpx;">
-				<text>本月支出</text>
+			<!-- <text>本月支出</text>
+			<view id="main" class="graph">
 				<echarts-el :option="option" style="width: 100%; height: 100%"></echarts-el>
-			</view>
-			<button @click="updateClick">切换数据</button>
+			</view> -->
+			<button @click="updateClick">刷新</button>
 		</div>
 	</div>
 </template>
@@ -27,122 +22,163 @@
 <script>
 	import Echarts from '@/components/echarts/echarts.vue'
 	import EchartsEl from '@/components/echarts/echarts-el.vue'
+	import "../../common/basic_method.js"
+	import {
+		generatesql,
+		openDB,
+		selectSQL,
+		closeDB,
+		executeSql
+	} from "../../common/DB_method.js"
+
 	export default {
 		data() {
-			Date.prototype.format = function(fmt) {
-				var o = {
-					"M+": this.getMonth() + 1, //月份
-					"d+": this.getDate(), //日
-				};
-				if (/(y+)/.test(fmt)) {
-					fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-				}
-				for (var k in o) {
-					if (new RegExp("(" + k + ")").test(fmt)) {
-						fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ?
-							(o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-					}
-				}
-				return fmt;
-			}
 			var get_date = new Date()
 			return {
-				Date: (get_date).format("yyyy-MM-dd"),
+				date: (get_date).format("YYYY-MM-DD hh:mm"),
 				option: {},
-				option2: {
-					notMerge: true, // 自定义变量：true代表不合并数据，比如从折线图变为柱形图则需设置为true；false或不写代表合并
-					tooltip: {
-						trigger: 'axis',
-						positionStatus: true,
-						formatterStatus: true, // 自定义变量：是否格式化tooltip，设置为false时下面三项均不起作用
-						formatterUnit: '元', // 自定义变量：数值后面的单位
-						formatFloat2: true, // 自定义变量：是否格式化为两位小数
-						formatThousands: true // 自定义变量：是否添加千分位
-					},
-					legend: {
-						data: ['邮件', '手机']
-					},
-					grid: {
-						left: '5%',
-						right: '8%',
-						bottom: '5%',
-						containLabel: true
-					},
-					xAxis: [{
-						type: 'category',
-						data: ['周一', '周二', '周三', '周四', '周五']
-					}],
-					yAxis: [{
-						type: 'value'
-					}],
-					series: [{
-							name: '邮件',
-							type: 'bar',
-							data: [120, 132, 101, 134, 90],
-							// 自定义变量，以数组形式传递渐变参数
-							linearGradient: [0, 0, 0, 1,
-								[{
-										offset: 0,
-										color: '#2378f7'
-									},
-									{
-										offset: 0.7,
-										color: '#2378f7'
-									},
-									{
-										offset: 1,
-										color: '#83bff6'
-									}
-								]
-							]
-						},
-						{
-							name: '手机',
-							type: 'bar',
-							data: [220, 182, 191, 234, 290],
-							// 自定义变量，以数组形式传递渐变参数
-							linearGradient: [0, 0, 0, 1,
-								[{
-										offset: 0,
-										color: '#0bac00'
-									},
-									{
-										offset: 0.7,
-										color: '#0dcb00'
-									},
-									{
-										offset: 1,
-										color: '#0fef00'
-									}
-								]
-							]
-						}
-					]
-				}
 			};
 		},
 		components: {
 			Echarts,
 			EchartsEl
 		},
-		onLoad() {
-			this.option = this.option2
+		onLoad: function() {
+			this.reload();
+		},
+		onPullDownRefresh: function(a) {
+			this.reload();
 		},
 		methods: {
-			/**
-			 * 点击事件
-			 * @param {Object} params
-			 */
 			echartsClick(params) {
 				console.log('点击数据', params)
 			},
-			/**
-			 * 切换数据
-			 */
 			updateClick() {
+				this.reload();
 				uni.showToast({
 					title: '刷新成功',
-				})
+				});
+			},
+			reload() {
+				var a = this
+				plus.sqlite.selectSql({
+					name: 'moneymap',
+					sql: 'select * from database',
+					success: function(e) {
+						var tag_sum = {}
+						for (var index = 0; index < e.length; index++) {
+							var item = e[index];
+							if (item.tags in tag_sum) {
+								tag_sum[item.tags] += parseFloat(item.price);
+							} else {
+								tag_sum[item.tags] = parseFloat(item.price);
+							}
+						}
+						var tags = [];
+						var sum = 0;
+						for (var index in tag_sum) {
+							tags.push(index);
+							sum += tag_sum[index];
+						}
+						var tag_data = [];
+						for (var i = 0; i < tags.length; i++) {
+							tag_data.push({
+								'value': tag_sum[tags[i]],
+								'name': tags[i],
+								'price': tag_sum[tags[i]]
+							})
+						}
+						console.log(tag_sum);
+						a.option = {
+							notMerge: false, // 自定义变量：true代表不合并数据，比如从折线图变为柱形图则需设置为true；false或不写代表合并
+							tooltip: {
+								show: true,
+								trigger: 'item',
+								formatter: function(params) {
+									console.log(params);
+									//系列名称
+									var seriesName = params.seriesName;
+									//类目名称
+									var name = params.name;
+									//百分比
+									var percent = params.percent;
+									return seriesName + '<br/>类别：' + name + '<br/>' + '所占百分比例：' + percent + '%';
+
+								},
+							},
+							legend: {
+								type: 'scroll',
+								left: '48%', //图列组件距离 图表组件走边的距离 (% or px)
+								top: '20%',
+								orient: 'vertical',
+								align: 'left',
+								itemGap: 13,
+								selectedMode: true,
+								itemWidth: 15,
+								itemHeight: 15,
+								height: 210, //图例组件的高度，设置指定高度确定显示图例出来的个数。
+								textStyle: {
+									fontWeight: 'bold',
+									fontSize: 12
+								},
+								scrollDataIndex: 0,
+								//默认选中，暂未实现
+								formatter: function(name) {
+									var arrays = option.baseOption.series[0].data;
+									for (var i = 0; i < arrays.length; i++) {
+										//名称
+										var type_name = arrays[i].name;
+										//人民币占比
+										var price = arrays[i].price;
+										if (type_name == name) {
+											return name + '\n' + price;
+											break;
+										}
+									}
+								},
+								data: tags
+							},
+							grid: {
+								left: '5%',
+								right: '8%',
+								bottom: '5%',
+								containLabel: true
+							},
+							// xAxis: [{
+							// 	type: 'category',
+							// 	data: tags
+							// }],
+							// yAxis: [{
+							// 	type: 'value'
+							// }],
+							series: [{
+								type: 'pie',
+								name: '图表详情',
+								center: ['25%', '40%'],
+								radius: ['23%', '50%'],
+								//图形上的文本标签
+								label: {
+									normal: {
+										/**
+										 * outside:饼图扇区外侧，通过视觉引导线连到相应的扇区。
+										 * inside:饼图扇区内部。
+										 * center:在饼图中心位置
+										 */
+										position: 'inside',
+										formatter: '{d}%',
+									},
+								},
+								data: tag_data
+							}]
+						};
+						uni.stopPullDownRefresh();
+					},
+					fail: function(e) {
+						plus.nativeUI.alert('查询SQL语句失败: ' + JSON.stringify(e));
+						a.sql_data = [];
+						uni.stopPullDownRefresh();
+					}
+				});
 			}
 		}
 	};
@@ -155,5 +191,13 @@
 		overflow: hidden;
 		margin-left: 50rpx;
 		margin-right: 50rpx;
+		padding: 1 1 1 1;
+	}
+
+	.graph {
+		width: 500rpx;
+		height: 500rpx;
+		margin: unset;
+		padding: unset;
 	}
 </style>

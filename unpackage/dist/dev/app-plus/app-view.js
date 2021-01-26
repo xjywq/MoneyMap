@@ -263,7 +263,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("创建表database及插入数据")]
+                [_vm._v("查询表database的数据")]
               )
             ],
             1
@@ -282,7 +282,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("查询表database的数据")]
+                [_vm._v("删除表database")]
               )
             ],
             1
@@ -301,45 +301,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("删除表database")]
-              )
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: _vm._$g(10, "sc"), attrs: { _i: 10 } },
-            [
-              _c(
-                "v-uni-button",
-                {
-                  attrs: { type: "primary", _i: 11 },
-                  on: {
-                    click: function($event) {
-                      return _vm.$handleViewEvent($event)
-                    }
-                  }
-                },
                 [_vm._v("关闭数据库Mymoney.db")]
-              )
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            { staticClass: _vm._$g(12, "sc"), attrs: { _i: 12 } },
-            [
-              _c(
-                "v-uni-button",
-                {
-                  attrs: { type: "primary", _i: 13 },
-                  on: {
-                    click: function($event) {
-                      return _vm.$handleViewEvent($event)
-                    }
-                  }
-                },
-                [_vm._v("查询是否打开数据库")]
               )
             ],
             1
@@ -347,8 +309,8 @@ var render = function() {
           _c(
             "v-uni-button",
             {
-              staticClass: _vm._$g(14, "sc"),
-              attrs: { _i: 14 },
+              staticClass: _vm._$g(10, "sc"),
+              attrs: { _i: 10 },
               on: {
                 click: function($event) {
                   return _vm.$handleViewEvent($event)
@@ -356,9 +318,63 @@ var render = function() {
               }
             },
             [_vm._v("上传")]
-          )
+          ),
+          _c(
+            "v-uni-button",
+            {
+              staticClass: _vm._$g(11, "sc"),
+              attrs: { _i: 11 },
+              on: {
+                click: function($event) {
+                  return _vm.$handleViewEvent($event)
+                }
+              }
+            },
+            [_vm._v("刷新")]
+          ),
+          _vm._l(_vm._$g(12, "f"), function(item, index, $20, $30) {
+            return _c(
+              "v-uni-view",
+              {
+                key: item,
+                staticClass: _vm._$g("12-" + $30, "sc"),
+                attrs: { _i: "12-" + $30 }
+              },
+              [
+                _c(
+                  "v-uni-view",
+                  { attrs: { _i: "13-" + $30 } },
+                  [
+                    _c(
+                      "span",
+                      { attrs: { _i: "14-" + $30 } },
+                      [
+                        _vm._v(_vm._$g("14-" + $30, "t0-0")),
+                        _c("br", { attrs: { _i: "15-" + $30 } }),
+                        _vm._v(_vm._$g("14-" + $30, "t2-0"))
+                      ],
+                      1
+                    ),
+                    _c("br", { attrs: { _i: "16-" + $30 } }),
+                    _c(
+                      "span",
+                      { attrs: { _i: "17-" + $30 } },
+                      [
+                        _vm._v(_vm._$g("17-" + $30, "t0-0")),
+                        _c("br", { attrs: { _i: "18-" + $30 } }),
+                        _vm._v(_vm._$g("17-" + $30, "t2-0"))
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ],
+              1
+            )
+          })
         ],
-        1
+        2
       )
     ],
     1
@@ -1123,40 +1139,11 @@ var render = function() {
           _c("v-uni-text", { attrs: { _i: 6 } }, [_vm._v("本月支出")]),
           _c(
             "v-uni-view",
-            {
-              staticClass: _vm._$g(7, "sc"),
-              staticStyle: { width: "100%" },
-              attrs: { _i: 7 }
-            },
-            [
-              _c(
-                "v-uni-view",
-                { staticClass: _vm._$g(8, "sc"), attrs: { _i: 8 } },
-                [_vm._v("A")]
-              ),
-              _c(
-                "v-uni-view",
-                { staticClass: _vm._$g(9, "sc"), attrs: { _i: 9 } },
-                [_vm._v("B")]
-              ),
-              _c(
-                "v-uni-view",
-                { staticClass: _vm._$g(10, "sc"), attrs: { _i: 10 } },
-                [_vm._v("C")]
-              )
-            ],
-            1
-          ),
-          _c(
-            "v-uni-view",
-            {
-              staticStyle: { width: "300rpx", height: "300rpx" },
-              attrs: { id: "main", _i: 11 }
-            },
+            { staticClass: _vm._$g(7, "sc"), attrs: { id: "main", _i: 7 } },
             [
               _c("echarts", {
                 staticStyle: { width: "100%", height: "100%" },
-                attrs: { _i: 12 },
+                attrs: { _i: 8 },
                 on: {
                   click: function($event) {
                     return _vm.$handleViewEvent($event)
@@ -1167,31 +1154,16 @@ var render = function() {
             1
           ),
           _c(
-            "v-uni-view",
-            {
-              staticStyle: { width: "300rpx", height: "300rpx" },
-              attrs: { id: "main", _i: 13 }
-            },
-            [
-              _c("v-uni-text", { attrs: { _i: 14 } }, [_vm._v("本月支出")]),
-              _c("echarts-el", {
-                staticStyle: { width: "100%", height: "100%" },
-                attrs: { _i: 15 }
-              })
-            ],
-            1
-          ),
-          _c(
             "v-uni-button",
             {
-              attrs: { _i: 16 },
+              attrs: { _i: 9 },
               on: {
                 click: function($event) {
                   return _vm.$handleViewEvent($event)
                 }
               }
             },
-            [_vm._v("切换数据")]
+            [_vm._v("刷新")]
           )
         ],
         1
@@ -2081,7 +2053,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../HBuilderX/plugins/uniapp-cli/node_modules/css-loader/dist/runtime/api.js */ 10);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.container {\n\tbackground-color: #52e2f8;\n\tborder-radius: 20rpx;\n\toverflow: hidden;\n\tmargin-left: 50rpx;\n\tmargin-right: 50rpx;\n}\n", ""]);
+exports.push([module.i, "\n.container {\n\tbackground-color: #52e2f8;\n\tborder-radius: 20rpx;\n\toverflow: hidden;\n\tmargin-left: 50rpx;\n\tmargin-right: 50rpx;\n\tpadding: 1 1 1 1;\n}\n.graph {\n\twidth: 500rpx;\n\theight: 500rpx;\n\tmargin: unset;\n\tpadding: unset;\n}\n", ""]);
 // Exports
 module.exports = exports;
 
@@ -2363,29 +2335,207 @@ var render = function() {
     "v-uni-view",
     { staticClass: _vm._$g(0, "sc"), attrs: { _i: 0 } },
     [
-      _c("h1", { attrs: { _i: 1 } }, [_vm._v("支出")]),
-      _c("v-uni-input", {
-        staticClass: _vm._$g(2, "sc"),
-        attrs: {
-          "confirm-type": "确认",
-          type: "digit",
-          focus: true,
-          placeholder: "金额",
-          _i: 2
-        },
-        on: {
-          confirm: function($event) {
-            return _vm.$handleViewEvent($event)
-          }
-        },
-        model: {
-          value: _vm._$g(2, "v-model"),
-          callback: function($$v) {
-            _vm.$handleVModelEvent(2, $$v)
-          },
-          expression: "price"
-        }
-      })
+      _c(
+        "v-uni-view",
+        { staticClass: _vm._$g(1, "sc"), attrs: { _i: 1 } },
+        [
+          _c("v-uni-text", { attrs: { _i: 2 } }, [_vm._v(_vm._$g(2, "t0-0"))]),
+          _c(
+            "v-uni-button",
+            {
+              staticClass: _vm._$g(3, "sc"),
+              attrs: { type: "default", _i: 3 },
+              on: {
+                click: function($event) {
+                  return _vm.$handleViewEvent($event)
+                }
+              }
+            },
+            [_vm._v("切换")]
+          )
+        ],
+        1
+      ),
+      _c(
+        "v-uni-view",
+        { staticClass: _vm._$g(4, "sc"), attrs: { _i: 4 } },
+        [
+          _c(
+            "v-uni-form",
+            {
+              ref: "submit_form",
+              attrs: { _i: 5 },
+              on: {
+                submit: function($event) {
+                  return _vm.$handleViewEvent($event)
+                },
+                reset: function($event) {
+                  return _vm.$handleViewEvent($event)
+                }
+              }
+            },
+            [
+              _c(
+                "v-uni-view",
+                { staticClass: _vm._$g(6, "sc"), attrs: { _i: 6 } },
+                [
+                  _c(
+                    "v-uni-view",
+                    { staticClass: _vm._$g(7, "sc"), attrs: { _i: 7 } },
+                    [_vm._v("价格")]
+                  ),
+                  _c("v-uni-input", {
+                    staticClass: _vm._$g(8, "sc"),
+                    attrs: {
+                      name: "price",
+                      focus: true,
+                      placeholder: "请输入价格",
+                      _i: 8
+                    },
+                    model: {
+                      value: _vm._$g(8, "v-model"),
+                      callback: function($$v) {
+                        _vm.$handleVModelEvent(8, $$v)
+                      },
+                      expression: "price"
+                    }
+                  })
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: _vm._$g(9, "sc"), attrs: { _i: 9 } },
+                [
+                  _c(
+                    "v-uni-view",
+                    { staticClass: _vm._$g(10, "sc"), attrs: { _i: 10 } },
+                    [_vm._v("标签")]
+                  ),
+                  _c(
+                    "v-uni-radio-group",
+                    { attrs: { name: "tag", _i: 11 } },
+                    _vm._l(_vm._$g(12, "f"), function(item, index, $20, $30) {
+                      return _c(
+                        "v-uni-view",
+                        {
+                          key: item,
+                          staticClass: _vm._$g("12-" + $30, "sc"),
+                          attrs: { _i: "12-" + $30 }
+                        },
+                        [
+                          _c(
+                            "v-uni-view",
+                            { attrs: { _i: "13-" + $30 } },
+                            [
+                              _c("v-uni-radio", {
+                                attrs: {
+                                  id: "item.value",
+                                  value: _vm._$g("14-" + $30, "a-value"),
+                                  checked: _vm._$g("14-" + $30, "a-checked"),
+                                  _i: "14-" + $30
+                                }
+                              })
+                            ],
+                            1
+                          ),
+                          _c(
+                            "v-uni-label",
+                            {
+                              staticClass: _vm._$g("15-" + $30, "sc"),
+                              attrs: { _i: "15-" + $30 }
+                            },
+                            [
+                              _c("v-uni-text", { attrs: { _i: "16-" + $30 } }, [
+                                _vm._v(_vm._$g("16-" + $30, "t0-0"))
+                              ])
+                            ],
+                            1
+                          )
+                        ],
+                        1
+                      )
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: _vm._$g(17, "sc"), attrs: { _i: 17 } },
+                [
+                  _c(
+                    "v-uni-view",
+                    { staticClass: _vm._$g(18, "sc"), attrs: { _i: 18 } },
+                    [_vm._v("必要")]
+                  ),
+                  _c(
+                    "v-uni-view",
+                    { attrs: { _i: 19 } },
+                    [
+                      _c("v-uni-switch", {
+                        attrs: { name: "isimportant", checked: "true", _i: 20 }
+                      })
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: _vm._$g(21, "sc"), attrs: { _i: 21 } },
+                [
+                  _c(
+                    "v-uni-view",
+                    { staticClass: _vm._$g(22, "sc"), attrs: { _i: 22 } },
+                    [_vm._v("备注")]
+                  ),
+                  _c("v-uni-input", {
+                    staticClass: _vm._$g(23, "sc"),
+                    attrs: { name: "comment", placeholder: "备注", _i: 23 },
+                    model: {
+                      value: _vm._$g(23, "v-model"),
+                      callback: function($$v) {
+                        _vm.$handleVModelEvent(23, $$v)
+                      },
+                      expression: "comment"
+                    }
+                  })
+                ],
+                1
+              ),
+              _c(
+                "v-uni-view",
+                { staticClass: _vm._$g(24, "sc"), attrs: { _i: 24 } },
+                [
+                  _c(
+                    "v-uni-button",
+                    { attrs: { "form-type": "submit", _i: 25 } },
+                    [_vm._v("确认")]
+                  ),
+                  _c(
+                    "v-uni-button",
+                    {
+                      attrs: { type: "default", _i: 26 },
+                      on: {
+                        click: function($event) {
+                          return _vm.$handleViewEvent($event)
+                        }
+                      }
+                    },
+                    [_vm._v("返回")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
     ],
     1
   )
@@ -2478,7 +2628,7 @@ if(false) {}
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../../../../HBuilderX/plugins/uniapp-cli/node_modules/css-loader/dist/runtime/api.js */ 10);
 exports = ___CSS_LOADER_API_IMPORT___(false);
 // Module
-exports.push([module.i, "\n.uni-max-wrap {\n\twidth: 100%;\n}\n.swiper {\n\theight: 300rpx;\n}\nuni-swiper-item {\n\tdisplay: block;\n\theight: 300rpx;\n\tline-height: 300rpx;\n\ttext-align: center;\n}\n.swiper-list {\n\tmargin-top: 40rpx;\n\tmargin-bottom: 0;\n}\n.uni-common-mt {\n\tmargin-top: 60rpx;\n\tposition: relative;\n}\n.info {\n\tposition: absolute;\n\tright: 20rpx;\n}\n.uni-padding-wrap {\n\twidth: 550rpx;\n\tpadding: 0 100rpx;\n}\n", ""]);
+exports.push([module.i, "\n.uni-header-text {\n\tfont-size: 50rpx;\n\ttext-align: center;\n\tmargin-top: 20rpx;\n\tmargin-bottom: 20rpx;\n\tfont-weight: 800;\n}\n.change_income_button {\n\tfont-size: 10rpx;\n}\n.label-2-text {\n\t-webkit-box-flex: 1;\n\t-webkit-flex: 1;\n\t        flex: 1;\n}\n", ""]);
 // Exports
 module.exports = exports;
 

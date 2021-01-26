@@ -5,82 +5,87 @@
 			<button class="change_income_button" type="default" @click="change_income">切换</button>
 		</view>
 		<view class="uni-padding-wrap uni-common-mt">
-			<form @submit="formSubmit" @reset="formReset">
+			<form @submit="formSubmit" @reset="formReset" ref="submit_form">
 				<view class="uni-form-item uni-column">
-					<view class="title">姓名</view>
-					<input class="uni-input" name="nickname" placeholder="请输入姓名" />
+					<view class="title">价格</view>
+					<input class="uni-input" v-model="price" name="price" focus placeholder="请输入价格" />
 				</view>
 				<view class="uni-form-item uni-column">
-					<view class="title">性别</view>
-					<radio-group name="gender">
-						<label>
-							<radio value="男" /><text>男</text>
-						</label>
-						<label>
-							<radio value="女" /><text>女</text>
-						</label>
+					<view class="title">标签</view>
+					<radio-group name="tag">
+						<view class="uni-list-cell" v-for="(item, index) in radioItems">
+							<view>
+								<radio id="item.value" :value=item.value :checked="item.checked"></radio>
+							</view>
+							<label class="label-2-text">
+								<text>{{item.value}}</text>
+							</label>
+						</view>
 					</radio-group>
 				</view>
 				<view class="uni-form-item uni-column">
-					<view class="title">爱好</view>
-					<checkbox-group name="loves">
-						<label>
-							<checkbox value="读书" /><text>读书</text>
-						</label>
-						<label>
-							<checkbox value="写字" /><text>写字</text>
-						</label>
-					</checkbox-group>
-				</view>
-				<view class="uni-form-item uni-column">
-					<view class="title">年龄</view>
-					<slider value="20" name="age" show-value></slider>
-				</view>
-				<view class="uni-form-item uni-column">
-					<view class="title">保留选项</view>
+					<view class="title">必要</view>
 					<view>
-						<switch name="switch" />
+						<switch name="isimportant" checked="true" />
 					</view>
 				</view>
+				<view class="uni-form-item uni-column">
+					<view class="title">备注</view>
+					<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
+				</view>
 				<view class="uni-btn-v">
-					<button form-type="submit">Submit</button>
-					<button type="default" form-type="reset">Reset</button>
+					<button form-type="submit">确认</button>
+					<button type="default" @click="formReset">返回</button>
 				</view>
 			</form>
 		</view>
-		<view><text>价格：</text><input v-model="price" @input="check_price_input" @confirm="uploadincome" class="uni-input"
-			 confirm-type="确认" type="digit" focus placeholder="金额" /></view>
 	</view>
 </template>
 
 <script>
+	import "../../common/basic_method.js"
+	import {
+		generatesql,
+		openDB,
+		selectSQL,
+		closeDB,
+		executeSql
+	} from "../../common/DB_method.js"
 	var graceChecker = require("../../common/graceChecker.js");
-	require("../../common/basic_method.js");
-	require("../../common/DB_method.js");
 	export default {
 		data() {
 			var date = new Date();
+			var table_name = 'moneymap';
+			openDB(table_name);
 			return {
-				title: 'SQLite',
 				price: '',
 				tag: '',
-				date: date.format('YYYY-MM-DD'),
+				date: date.format('YYYY-MM-DD hh:mm'),
 				comment: '',
 				isimportant: true,
 				income_text: '收入',
 				income: false,
-				table_name: 'moneymap'
+				table_name: table_name,
+				radioItems: [{
+						value: '餐饮',
+						checked: 'true'
+					},
+					{
+						value: '娱乐'
+					},
+					{
+						value: '生活'
+					},
+					{
+						value: '学习'
+					},
+					{
+						value: '交通'
+					}
+				],
 			}
 		},
 		methods: {
-			uploadincome: function(event) {
-				openDB(this.table_name);
-				var sql_table =
-					'create table if not exists database("income" INT(1),"price" FLOAT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "time" DATE)';
-				var sql_query = this.generatesql(this.income, this.price, this.tag, this.isimportant, this.comment, this.date);
-				executeSql(this.table_name, sql_table, sql_query);
-				closeDB(this.table_name);
-			},
 			change_income: function() {
 				if (this.income) {
 					this.income = false;
@@ -90,37 +95,28 @@
 					this.income_text = '收入';
 				}
 			},
-			check_price_input: function(event) {
-				this.price = this.price.match(/^\d+(?:\.\d{0,2})?/);
-			},
 			formSubmit: function(e) {
 				console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
 				//定义表单规则
 				var rule = [{
-						name: "nickname",
-						checkType: "string",
-						checkRule: "1,3",
-						errorMsg: "姓名应为1-3个字符"
-					},
-					{
-						name: "gender",
-						checkType: "in",
-						checkRule: "男,女",
-						errorMsg: "请选择性别"
-					},
-					{
-						name: "loves",
-						checkType: "notnull",
-						checkRule: "",
-						errorMsg: "请选择爱好"
-					}
-				];
+					name: "price",
+					checkType: "price",
+					errorMsg: "请输入正确的价格"
+				}];
 				//进行表单检查
 				var formData = e.detail.value;
 				var checkRes = graceChecker.check(formData, rule);
 				if (checkRes) {
+					openDB(this.table_name);
+					var sql_table =
+						'create table if not exists database("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
+					var sql_query = generatesql(this.income, formData.price, formData.tag, formData.isimportant, formData.comment,
+						this.date);
+					executeSql(this.table_name, sql_table, sql_query);
+					// closeDB(this.table_name);
+					uni.navigateBack();
 					uni.showToast({
-						title: "验证通过!",
+						title: "上传成功",
 						icon: "none"
 					});
 				} else {
@@ -131,7 +127,7 @@
 				}
 			},
 			formReset: function(e) {
-				console.log('清空数据')
+				uni.navigateBack();
 			}
 		}
 	}
@@ -149,8 +145,8 @@
 	.change_income_button {
 		font-size: 10rpx;
 	}
-	
-	.uni-form-item .title {
-		padding: 20rpx 0;
+
+	.label-2-text {
+		flex: 1;
 	}
 </style>
