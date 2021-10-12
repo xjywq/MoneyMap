@@ -1,12 +1,22 @@
 <script>
+	import {
+		openDB,
+		closeDB
+	} from "common/DB_method.js"
+	
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
+			var appData = require('global setting.json');
+			console.log(appData);
+			console.log("data");
 		},
 		onShow: function() {
+			openDB();
 			console.log('App Show')
 		},
 		onHide: function() {
+			closeDB();
 			console.log('App Hide')
 		}
 	}

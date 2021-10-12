@@ -4,14 +4,18 @@
 		<center>
 			<image src='/static/头像.jpg' class="photo"></image>
 		</center>
+		<uni-list>
+			<uni-list-item>设置</uni-list-item>
+		</uni-list>
 	</view>
 </template>
 
 <script>
 	export default {
 		data() {
+			var appData = require('../../global setting.json');
+			console.log(appData);
 			return {
-
 			}
 		},
 

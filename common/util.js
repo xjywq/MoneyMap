@@ -36,7 +36,6 @@ var dateUtils = {
 		'天': 86400000,
 		'小时': 3600000,
 		'分钟': 60000,
-		'秒': 1000
 	},
 	humanize: function (milliseconds) {
 		var humanize = '';
@@ -48,21 +47,19 @@ var dateUtils = {
 		}
 		return humanize || '刚刚';
 	},
-	format: function (dateStr) {
-		var date = this.parse(dateStr)
+	format: function (date, isformat=false) {
+		// data: Date类对象, isformat: 是否转换成"...前"的格式
 		var diff = Date.now() - date.getTime();
-		if (diff < this.UNITS['天']) {
+		if (diff < this.UNITS['天'] && isformat) {
+			// 如果超过1天, 则显示完整日期
 			return this.humanize(diff);
 		}
 		var _format = function (number) {
+			// 添加前缀0
 			return (number < 10 ? ('0' + number) : number);
 		};
 		return date.getFullYear() + '/' + _format(date.getMonth() + 1) + '/' + _format(date.getDate()) + '-' +
 			_format(date.getHours()) + ':' + _format(date.getMinutes());
-	},
-	parse: function (str) { //将"yyyy-mm-dd HH:MM:ss"格式的字符串，转化为一个Date对象
-		var a = str.split(/[^0-9]/);
-		return new Date(a[0], a[1] - 1, a[2], a[3], a[4], a[5]);
 	}
 };
 
