@@ -24,15 +24,15 @@
 	import EchartsEl from '@/components/echarts/echarts-el.vue';
 	import {
 		dateUtils
-	} from "../../common/util.js";
-	import * as GlobalSetting from "../../global setting.json";
+	} from "@/common/util.js";
+	import * as GlobalSetting from "@/global setting.json";
 	import {
 		generatesql,
 		openDB,
 		selectSQL,
 		closeDB,
 		executeSql
-	} from "../../common/DB_method.js"
+	} from "@/common/DB_method.js"
 
 	export default {
 		data() {

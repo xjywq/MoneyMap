@@ -7,9 +7,6 @@
 	export default {
 		onLaunch: function() {
 			console.log('App Launch')
-			var appData = require('global setting.json');
-			console.log(appData);
-			console.log("data");
 		},
 		onShow: function() {
 			openDB();

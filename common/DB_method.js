@@ -77,7 +77,7 @@ export function closeDB(table_name) {
 	plus.sqlite.closeDatabase({
 		name: table_name,
 		success: function(e) {
-			plus.nativeUI.alert('关闭数据库成功');
+			// plus.nativeUI.alert('关闭数据库成功');
 		},
 		fail: function(e) {
 			plus.nativeUI.alert('关闭数据库失败: ' + JSON.stringify(e));
@@ -97,7 +97,7 @@ export function executeSql(table_name, sql_table, sql_query) {
 					// plus.nativeUI.alert('创建表table和插入数据成功');
 				},
 				fail: function(e) {
-					plus.nativeUI.alert('创建表table成功但插入数据失败: ' + JSON.stringify(e));
+					plus.nativeUI.alert('插入数据失败: ' + JSON.stringify(e));
 				}
 			});
 		},
