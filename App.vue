@@ -23,4 +23,5 @@
 		font-size: 14rpx;
 		line-height: 24rpx;
 	}
+	
 </style>
