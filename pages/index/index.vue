@@ -7,7 +7,7 @@
 			<view class="uni-btn-v"><button type="primary" @click="closeDB">关闭数据库Mymoney.db</button></view>
 			<button class="jump" @tap="navigateTo">上传</button>
 			<button class="jump" @tap="updateClick">刷新</button>
-			<view>
+			<!--<view>
 				<qiun-title-bar title="统计时间"/>
 				<picker mode="selector" @change="timeFrameChange" :range="timeArray" :value="0">
 					<view style="padding-left: 40rpx;"><span class="whatever-some-font">{{timeArray[timeIndex]}}</span></view>
@@ -21,7 +21,7 @@
 			<qiun-title-bar title="收入情况"/>
 			<view class="charts-box" @longpress="inDetail" >
 				<qiun-data-charts type="ring" :opts="inOpts" :chartData="inData"/>
-			</view>
+			</view> -->
 		</view>
 	</view>
 </template>
