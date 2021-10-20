@@ -204,8 +204,9 @@
 				var a = this;
 				var date = new Date();
 
-				var sqlWhere = (this.start_date == '无') ? '' :' WHERE day >= ' + this.start_date;
-				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : 'AND') +' day <= ' + this.end_date);
+				var sqlWhere = (this.start_date == '无') ? '' :' WHERE day >= "' + this.start_date + '"'; 
+				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') +' day <= "' + this.end_date + '"'
+				);
 				console.log('select * from database' + sqlWhere);
 				plus.sqlite.selectSql({
 					name: 'moneymap',
