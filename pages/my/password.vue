@@ -2,13 +2,6 @@
 	<view class="content">
 		<input type="text" v-model="username" placeholder="用户名/邮箱/手机号" />
 		<input type="text" v-model="password" password="true" placeholder="密码" />
-		<view class="row">
-			<checkbox-group @change="permissionChange">
-				<label>
-					<checkbox value="needPermission" /><text>启用Permission，一般在管理后台需要传递此参数</text>
-				</label>
-			</checkbox-group>
-		</view>
 		<button type="default" @tap="register">注册</button>
 		<button type="default" @tap="login">登录</button>
 		<button type="default" @tap="updatePwd">修改密码</button>
@@ -22,13 +15,9 @@
 			return {
 				username: '',
 				password: '',
-				needPermission: false
 			}
 		},
 		methods: {
-			permissionChange(e) {
-				this.needPermission = e.detail.value.indexOf('needPermission') > -1
-			},
 			register() {
 				uniCloud.callFunction({
 					name: 'uni-id-test',

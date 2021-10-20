@@ -90,9 +90,7 @@
 								'price': tag_sum[index]
 							})
 						}
-						console.log(tag_sum);
-						console.log(tag_data);
-						plus.nativeUI.alert(JSON.stringify(tag_data))
+
 						var option = {
 							baseOption: {
 								// 调色盘颜色列表
