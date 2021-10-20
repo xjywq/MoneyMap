@@ -197,6 +197,7 @@
 			},
 			
 			reload() {
+				this.category = ''; 
 				this.outData = {"series": [{"data": []}]};
 				this.inData = {"series": [{"data": []}]};
 				this.show_chart = false;
@@ -231,7 +232,7 @@
 			
 			inDetail () {
 				uni.navigateTo({
-					url: "detail?type=out&category=" + this.category +"&sql_data=" + JSON.stringify(this.sql_data)
+					url: "detail?type=in&category=" + this.category +"&sql_data=" + JSON.stringify(this.sql_data)
 				});
 			},
 		}
