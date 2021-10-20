@@ -52,6 +52,7 @@
 		executeSql
 	} from "../../common/DB_method.js"
 	var graceChecker = require("../../common/graceChecker.js");
+	
 	export default {
 		data() {
 			var date = new Date();
@@ -64,7 +65,7 @@
 				comment: '',
 				isimportant: true,
 				income_text: '收入',
-				income: false,
+				income: true,
 				table_name: table_name,
 				radioItems: [{
 						value: '餐饮',
@@ -113,12 +114,14 @@
 					var sql_query = generatesql(this.income, formData.price, formData.tag, formData.isimportant, formData.comment,
 						this.date);
 					executeSql(this.table_name, sql_table, sql_query);
+					setTimeout(function () {
+						uni.navigateBack();
+						uni.showToast({
+							title: "上传成功",
+							icon: "none"
+						});
+					} ,100);
 					// closeDB(this.table_name);
-					uni.navigateBack();
-					uni.showToast({
-						title: "上传成功",
-						icon: "none"
-					});
 				} else {
 					uni.showToast({
 						title: graceChecker.error,

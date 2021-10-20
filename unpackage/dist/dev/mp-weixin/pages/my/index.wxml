@@ -1,0 +1,1 @@
+<view class="container"><view style="height:100;" class="_div"></view><center vue-id="4a180d5e-1" bind:__l="__l" vue-slots="{{['default']}}"><image class="photo" src="/static/头像.jpg"></image></center></view>
