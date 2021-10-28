@@ -14,7 +14,7 @@
 			<view id="main" class="graph">
 				<echarts-el :option="option" style="width: 100%; height: 100%" @click="echartsClick"></echarts-el>
 			</view>
-			<button @click="updateClick">刷新</button>
+			<button @click="updateClick">刷新成功</button>
 		</div>
 	</div>
 </template>
