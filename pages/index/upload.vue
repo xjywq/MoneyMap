@@ -47,7 +47,7 @@
 	import {
 		generatesql,
 		openDB,
-		selectSQL,
+		selectSQL,	//not use
 		closeDB,
 		executeSql
 	} from "../../common/DB_method.js"
@@ -57,7 +57,11 @@
 		data() {
 			var date = new Date();
 			var table_name = 'moneymap';
-			openDB(table_name);
+			var log_in = true;
+			if (log_in) {
+				table_name = 'xiaoming';
+			}
+			// openDB(table_name);
 			return {
 				price: '',
 				tag: '',
@@ -108,12 +112,15 @@
 				var formData = e.detail.value;
 				var checkRes = graceChecker.check(formData, rule);
 				if (checkRes) {
-					openDB(this.table_name);
+					// console.log("close");
+					// console.log("success");
+					// openDB(this.table_name);
 					var sql_table =
 						'create table if not exists database("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
 					var sql_query = generatesql(this.income, formData.price, formData.tag, formData.isimportant, formData.comment,
 						this.date);
 					executeSql(this.table_name, sql_table, sql_query);
+					console.log("scjs");
 					setTimeout(function () {
 						uni.navigateBack();
 						uni.showToast({
