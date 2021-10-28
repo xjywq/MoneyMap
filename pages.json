@@ -36,16 +36,17 @@
 			"style": {
 				"navigationBarTitleText": "登录"
 			}
-		},
-		{
-			"path": "pages/index/detail",
-			"style": {
-				"navigationBarTitleText": "明细",
-				"enablePullDownRefresh": false
-			}
-
 		}
-	],
+	    ,{
+            "path" : "pages/form/detail",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "明细",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
