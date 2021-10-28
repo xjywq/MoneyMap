@@ -1,0 +1,12 @@
+{
+	"LimitSetting": {
+		"MonthLimit": 2000,
+		"DayLimit": 100
+	},
+	"UploadSetting": {
+		"Tags": [
+			"餐饮", "娱乐", "学习", "生活", "交通"
+		],
+		"DefaultTag": "餐饮"
+	}
+}
