@@ -151,7 +151,10 @@
 		width: 100%;
 		height: 300px;
 	}
-
+	.line-box {
+		width: 100%;
+		height: 50px;
+	}
 	.whatever-some-font {
 		font-family: "STKaiti";
 		font-size: 35rpx;

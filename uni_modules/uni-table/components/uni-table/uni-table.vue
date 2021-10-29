@@ -301,7 +301,7 @@ export default {
 </script>
 
 <style lang="scss">
-$border-color: #ebeef5;
+$border-color: #ffffff;
 
 .uni-table-scroll {
 	width: 100%;
@@ -315,21 +315,21 @@ $border-color: #ebeef5;
 	width: 100%;
 	border-radius: 5px;
 	// box-shadow: 0px 0px 3px 1px rgba(0, 0, 0, 0.1);
-	background-color: #fff;
+	background-color: #ffffff;
 	/* #ifndef APP-NVUE */
 	box-sizing: border-box;
 	display: table;
 	overflow-x: auto;
 	::v-deep .uni-table-tr:nth-child(n + 2) {
 		&:hover {
-			background-color: #f5f7fa;
+			background-color: #ffffff;
 		}
 	}
 	::v-deep .uni-table-thead {
 		.uni-table-tr {
 			// background-color: #f5f7fa;
 			&:hover {
-				background-color:#fafafa;
+				background-color:#ffffff;
 			}
 		}
 	}
@@ -350,7 +350,7 @@ $border-color: #ebeef5;
 .table--stripe {
 	/* #ifndef APP-NVUE */
 	::v-deep .uni-table-tr:nth-child(2n + 3) {
-		background-color: #fafafa;
+		background-color: #ffffff;
 	}
 	/* #endif */
 }
