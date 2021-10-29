@@ -42,21 +42,25 @@
 	</view>
 </template>
 
-<script>
+<script >
 	import "../../common/basic_method.js"
 	import {
 		generatesql,
 		openDB,
 		selectSQL,	//not use
 		closeDB,
-		executeSql
+		executeSql,
+		movetable,
 	} from "../../common/DB_method.js"
 	var graceChecker = require("../../common/graceChecker.js");
-	
+	var global_setting = require("../../global setting.json");
+	// console.log(global_setting);
+	// console.log(global_setting['UploadSetting']['Tags'][0])
 	export default {
 		data() {
 			var date = new Date();
-			var table_name = 'moneymap';
+			var db = 'moneymap'
+			var table_name = 'initial';
 			var log_in = true;
 			if (log_in) {
 				table_name = 'xiaoming';
@@ -70,22 +74,28 @@
 				isimportant: true,
 				income_text: '收入',
 				income: true,
+				db: db,
 				table_name: table_name,
 				radioItems: [{
-						value: '餐饮',
+						value: global_setting['UploadSetting']['Tags'][0],
+						// value: '餐饮',
 						checked: 'true'
 					},
 					{
-						value: '娱乐'
+						value: global_setting['UploadSetting']['Tags'][1],
+						// value: '娱乐'
 					},
 					{
-						value: '生活'
+						value: global_setting['UploadSetting']['Tags'][2],
+						// value: '生活'
 					},
 					{
-						value: '学习'
+						value: global_setting['UploadSetting']['Tags'][3],
+						// value: '学习'
 					},
 					{
-						value: '交通'
+						value: global_setting['UploadSetting']['Tags'][4],
+						// value: '交通'
 					}
 				],
 			}
@@ -112,15 +122,10 @@
 				var formData = e.detail.value;
 				var checkRes = graceChecker.check(formData, rule);
 				if (checkRes) {
-					// console.log("close");
-					// console.log("success");
-					// openDB(this.table_name);
 					var sql_table =
-						'create table if not exists database("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
-					var sql_query = generatesql(this.income, formData.price, formData.tag, formData.isimportant, formData.comment,
-						this.date);
-					executeSql(this.table_name, sql_table, sql_query);
-					console.log("scjs");
+						'create table if not exists ' + this.table_name + '("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
+					var sql_query = generatesql(this.income, formData.price, formData.tag, formData.isimportant, formData.comment, this.date, this.table_name);
+					executeSql(this.db, sql_table, sql_query);
 					setTimeout(function () {
 						uni.navigateBack();
 						uni.showToast({

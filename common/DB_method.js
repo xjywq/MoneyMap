@@ -1,4 +1,4 @@
-export function generatesql(income, money, tags, isimportant, comment, t) { //初始化sql_query
+export function generatesql(income, money, tags, isimportant, comment, t, table_name) { //初始化sql_query
 	String.prototype.format = function(kwargs) {
 		return this.replace(/\{(\w+)\}/g, function(k, v) {
 			return kwargs[v]
@@ -19,17 +19,17 @@ export function generatesql(income, money, tags, isimportant, comment, t) { //�
 	else
 		kwargs['isimportant'] = 0
 	var sql =
-		"insert into database values('{income}','{price}','{tags}','{comment}','{isimportant}', '{day}', '{time}')"
+		"insert into " + table_name + " values('{income}','{price}','{tags}','{comment}','{isimportant}', '{day}', '{time}')"
 		.format(
 			kwargs)
 	console.log(sql)
 	return sql
 }
 
-export function openDB(table_name) {
+export function openDB(db) {
 	if (
 		plus.sqlite.isOpenDatabase({
-			name: table_name,
+			name: db,
 			path: '_doc/Mymoney.db'
 		})
 	) {
@@ -37,7 +37,7 @@ export function openDB(table_name) {
 	} else {
 		// plus.nativeUI.alert('Unopened!');
 		plus.sqlite.openDatabase({
-			name: table_name,
+			name: db,
 			path: '_doc/Mymoney.db',
 			success: function(e) {
 				// plus.nativeUI.alert('打开数据库Mymoney.db成功 ');
@@ -49,10 +49,9 @@ export function openDB(table_name) {
 	}
 }
 // 查询SQL语句
-export function selectSQL(table_name, sql) {
-	openDB(table_name);
+export function selectSQL(db, sql) {
 	plus.sqlite.selectSql({
-		name: table_name,
+		name: db,
 		sql: sql,
 		success: function(e) {
 			plus.nativeUI.alert('查询SQL语句成功: ' + JSON.stringify(e));
@@ -61,25 +60,22 @@ export function selectSQL(table_name, sql) {
 			plus.nativeUI.alert('查询SQL语句失败: ' + JSON.stringify(e));
 		}
 	});
-	closeDB(table_name)
 }
 // 删除表
-export function droptable(table_name) {
-	openDB(table_name);
-	plus.nativeUI.alert('在drop中打开表成功');
+export function droptable(db, table_name) {
 	plus.sqlite.executeSql({
-		name: table_name,
-		sql: 'drop table database',
+		name: db,
+		sql: 'drop table ' + table_name,
 		success: function(e) {
-			// plus.nativeUI.alert('删除表database成功');
+			// plus.nativeUI.alert('删除表'+table_name+'成功');
 		},
 		fail: function(e) {
 			plus.nativeUI.alert('删除表database失败: ' + JSON.stringify(e));
 		}
 	});
 	plus.sqlite.executeSql({
-		name: table_name,
-		sql: 'create table if not exists database("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)',
+		name: db,
+		sql: 'create table if not exists ' + table_name + '("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)',
 		success: function(e) {
 			// plus.nativeUI.alert('创建或打开表table成功');
 		},
@@ -87,18 +83,16 @@ export function droptable(table_name) {
 			plus.nativeUI.alert('创建表table失败: ' + JSON.stringify(e));
 		}
 	});
-	closeDB(table_name);
-	plus.nativeUI.alert('在drop中关闭表成功');
 }
 // 关闭数据库
-export function closeDB(table_name) {
+export function closeDB(db) {
 	if (plus.sqlite.isOpenDatabase({
-			name: table_name,
+			name: db,
 			path: '_doc/Mymoney.db'
 		})
 	){
 		plus.sqlite.closeDatabase({
-			name: table_name,
+			name: db,
 			success: function(e) {
 				// plus.nativeUI.alert('关闭数据库成功');
 			},
@@ -109,44 +103,38 @@ export function closeDB(table_name) {
 	}
 }
 
-export function executeSql(table_name, sql_table, sql_query) {
-	openDB(table_name);
-	plus.nativeUI.alert('在execute中打开table成功');
+export function executeSql(db, sql_table, sql_query) {
 	plus.sqlite.executeSql({
-		name: table_name,
+		name: db,
 		sql: sql_table,
 		success: function(e) {
 			plus.sqlite.executeSql({
-				name: table_name,
+				name: db,
 				sql: sql_query,
 				success: function(e) {
-					plus.nativeUI.alert('创建表table和插入数据成功');
-					closeDB(table_name);
+					plus.nativeUI.alert('插入数据成功');
 				},
 				fail: function(e) {
 					plus.nativeUI.alert('插入数据失败: ' + JSON.stringify(e));
-					closeDB(table_name);
 				}
 			});
 		},
 		fail: function(e) {
 			plus.nativeUI.alert('创建表table失败: ' + JSON.stringify(e));
-			closeDB(table_name);
 		}
 	});
-	// closeDB(table_name);
-	plus.nativeUI.alert('在execute中关闭table成功');
 }
 
-export function moveDB(table_name_1, table_name_2) {
+export function movetable(db, table_name1, table_name2) {
 	plus.sqlite.executeSql({
-		name: table_name,
-		sql: 'insert into b select * from a',
+		name: db,
+		sql: 'insert into ' + table_name2 + ' select * from ' + table_name1,
 		success: function(e) {
-			plus.nativeUI.alert('复制表table失败: ' + JSON.stringify(e));
+			plus.nativeUI.alert('复制表table成功: ' + JSON.stringify(e));
 		},
 		fail: function(e) {
 			plus.nativeUI.alert('复制表table失败: ' + JSON.stringify(e));
 		}
 	});
+	droptable(db, table_name1);
 }

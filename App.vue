@@ -6,9 +6,9 @@
 	
 	export default {
 		onLaunch: function() {
-			var table_name = 'moneymap';
+			var table_name = 'moneymap'
 			var sql_table =
-				'create table if not exists database("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
+				'create table if not exists initial("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
 			openDB(table_name);
 			// plus.nativeUI.alert('成功打开tablemoneymap');
 			plus.sqlite.executeSql({
@@ -21,13 +21,12 @@
 					plus.nativeUI.alert('创建表table失败: ' + JSON.stringify(e));
 				}
 			});
-			closeDB(table_name);
+			
 			// plus.nativeUI.alert('成功关闭tablemoneymap');
 			
-			var table_name = 'xiaoming';
+			
 			var sql_table =
-				'create table if not exists database("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
-			openDB(table_name);
+				'create table if not exists xiaoming("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
 			// plus.nativeUI.alert('成功打开tablexiaoming');
 			plus.sqlite.executeSql({
 				name: table_name,
@@ -39,7 +38,6 @@
 					plus.nativeUI.alert('创建表table失败: ' + JSON.stringify(e));
 				}
 			});
-			closeDB(table_name);
 			// plus.nativeUI.alert('成功关闭tablexiaoming');
 			
 			
