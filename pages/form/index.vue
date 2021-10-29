@@ -2,7 +2,7 @@
 	<view>
 		<div class="container">
 			<div class="container DataContainer">
-				<qiun-title-bar :title="'日期: ' + date"/>
+				<qiun-title-bar :title="'日期: ' + date" />
 			</div>
 			<div class="container ChartContainer">
 				<!-- <h1 class="title">我的账单</h1> -->
@@ -11,70 +11,72 @@
 					<echarts :option="option" style="width: 100%; height: 100%" @click="echartsClick"></echarts>
 				</view> -->
 				<!-- <text>本月支出</text> -->
-				<qiun-title-bar title="统计时间"/>
+				<qiun-title-bar title="统计时间" />
 				<view class="leave_cont">
 					<view class="ul">
 						<view class="li">
 							<text>开始时间</text>
 							<view class="flex1">
-								<picker mode="date" :end="(end_date_string == '无') ? date: end_date_string" @change="bindDateChange">
-									<view class="date" @longpress="start_date_string = '无'">{{start_date_string}}</view>
+								<picker mode="date" :end="(end_date == '无') ? date: end_date" @change="bindDateChange">
+									<view class="date" @longpress="start_date = '无'">{{start_date}}</view>
 								</picker>
 							</view>
 						</view>
 						<view class="li">
 							<text>结束时间</text>
 							<view class="flex1">
-								<picker mode="date" :start="(start_date_string == '无') ? '1970-01-01': start_date_string" :end="date" @change="bindDateChange2">
-									<view class="date" @longpress="end_date_string = '无'">{{end_date_string}}</view>
+								<picker mode="date" :start="(start_date == '无') ? '1970-01-01': start_date" :end="date"
+									@change="bindDateChange2">
+									<view class="date" @longpress="end_date = '无'">{{end_date}}</view>
 								</picker>
 							</view>
 						</view>
 					</view>
 				</view><br>
-				
-				<qiun-title-bar title="收支折线图"/>
+
+				<qiun-title-bar title="收支折线图" />
 				<view class="line-box">
-					<qiun-data-charts type="line" 
-					:chartData="linedata"/>
+					<qiun-data-charts type="line" :chartData="linedata" />
 				</view>
-				
-				<qiun-title-bar title="支出情况"/>
+
+				<qiun-title-bar title="支出情况" />
 				<view class="charts-box">
-					<qiun-data-charts type="ring" :opts="outOpts" :chartData="outData"/>
+					<qiun-data-charts type="ring" :opts="outOpts" :chartData="outData" />
 				</view>
-				
-				<qiun-title-bar title="收入情况"/>
-				<view class="charts-box" @longpress="inDetail" >
-					<qiun-data-charts type="ring" :opts="inOpts" :chartData="inData"/>
+
+				<qiun-title-bar title="收入情况" />
+				<view class="charts-box" @longpress="inDetail">
+					<qiun-data-charts type="ring" :opts="inOpts" :chartData="inData" />
 				</view>
 				<button @click="updateClick">刷新</button>
 			</div>
 		</div>
-		
-		
-		
+
+
+
 		<!-- syh -->
 		<view v-if="show_chart">
 			<qiun-title-bar title="支出情况表" />
-			<uni-table border stripe emptyText="无更多数据" >
+			<uni-table border stripe emptyText="无更多数据">
 				<!-- 表头行 -->
 				<uni-tr>
 					<uni-th align="center">分类</uni-th>
 					<uni-th align="center">金额</uni-th>
 				</uni-tr>
 				<!-- 表格数据行 -->
-				<uni-tr v-for="(record, index) in outData['series'][0]['data']" >
-					<uni-td align="center"><span @click="(category=record['name'])&&outDetail()">{{record["name"]}}</span></uni-td>
-					<uni-td align="center"><span @click="(category=record['name'])&&outDetail()">￥{{record["value"]}}</span></uni-td>
+				<uni-tr v-for="(record, index) in outData['series'][0]['data']">
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&outDetail()">{{record["name"]}}</span></uni-td>
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&outDetail()">￥{{record["value"]}}</span></uni-td>
 				</uni-tr>
-			
+
 			</uni-table><br>
 		</view><br>
-		
+
 		<view v-if="show_chart">
 			<qiun-title-bar title="收入情况表" />
-			<uni-table border stripe emptyText="无更多数据" >
+			<uni-table border stripe emptyText="无更多数据">
 				<!-- 表头行 -->
 				<uni-tr>
 					<uni-th align="center">分类</uni-th>
@@ -82,10 +84,12 @@
 				</uni-tr>
 				<!-- 表格数据行 -->
 				<uni-tr v-for="(record, index) in inData['series'][0]['data']">
-					<uni-td align="center"><span @click="(category=record['name'])&&inDetail()">{{record["name"]}}</span></uni-td>
-					<uni-td align="center"><span @click="(category=record['name'])&&inDetail()">￥{{record["value"]}}</span></uni-td>
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&inDetail()">{{record["name"]}}</span></uni-td>
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&inDetail()">￥{{record["value"]}}</span></uni-td>
 				</uni-tr>
-			
+
 			</uni-table><br>
 		</view>
 	</view>
@@ -109,19 +113,17 @@
 		data() {
 			var date1 = new Date();
 			var startdate = new Date(date1);
-			console.log(startdate);
-			startdate.setDate(date1.getDate()-30);
-			console.log(startdate);
-			
+			startdate.setDate(date1.getDate() - 7);
+
 			return {
-				start_date_string: startdate.format("YYYY-MM-DD"),
-				end_date_string: date1.format("YYYY-MM-DD"),
-				start_date:startdate.getDate(),
-				end_date:date1.getDate(),
-				outData:{},
+				start_date: startdate.format("YYYY-MM-DD"),
+				end_date: date1.format("YYYY-MM-DD"),
+				delta_date: 30,
+				outData: {},
 				outOpts: {},
-				inData:{},
+				inData: {},
 				inOpts: {},
+				linedata: {},
 				sql_data: [],
 				date: date1.format("YYYY-MM-DD"),
 				sql: 'select * from database',
@@ -134,25 +136,25 @@
 		onLoad: function() {
 			this.reload();
 		},
-		
+
 		onShow: function() {
 			this.reload();
 		},
-		
+
 		onPullDownRefresh: function(a) {
 			this.updateClick();
 		},
+		
 		methods: {
 			bindDateChange: function(e) {
-				this.start_date_string = e.target.value;
+				this.start_date = e.target.value;
 				this.reload();
-				
 			},
 			bindDateChange2: function(e) {
-				this.end_date_string = e.target.value;
+				this.end_date = e.target.value;
 				this.reload();
 			},
-			
+
 			updateClick() {
 				this.reload();
 				uni.showToast({
@@ -160,128 +162,171 @@
 				});
 				uni.stopPullDownRefresh();
 			},
-			
-			timeFrameChange (e) {
+
+			timeFrameChange(e) {
 				this.timeIndex = e.target.value;
 				this.reload();
 			},
-			
+
 			dic2list(dic) {
 				var ret = new Array();
 				for (var key in dic) {
-					ret.push({"name":key, "value": dic[key]});
+					ret.push({
+						"name": key,
+						"value": dic[key]
+					});
 				}
 				return ret;
 			},
-			
-			datelist(){
-				console.log("start");
-				sdate = this.start_date;
-				console.log(sdate);
-				edate = this.end_date;
-				console.log(edate);
-				var ret = edate - sdate;
-				console.log(ret);
+
+			datelist: function() {
 				var l = [];
-				for(var i=0;i<30;i++){
+				for (var i = 0; i < this.delta_date; i++) {
 					l.push(0);
-	
 				}
 				return l;
 			},
-			
-			
-			updateChart () {
+
+			updateChart() {
 				var sql_data = this.sql_data;
-				var outcount = 0, incount = 0;
-				var outData = {}, inData = {};
+				var outcount = 0,
+					incount = 0;
+				var outData = {},
+					inData = {};
 				var linedata = {};
-				var l1=this.datelist(),l2=[2,4,6];
-				console.log(l1);
-				sql_data.forEach( function(item) {
+				var l1 = this.datelist(),
+					l2 = this.datelist();
+				var sd = Date.parse(this.start_date);
+				
+				sql_data.forEach(function(item) {
+					var ed = Date.parse(item["day"]);
+					var delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
+					console.log(delta_date);
 					if (item["income"] == "true") {
 						incount += item["price"];
+						l1[delta_date-1] += item["price"];
 						if (!inData.hasOwnProperty(item["tags"])) inData[item["tags"]] = item["price"];
 						else inData[item["tags"]] += item["price"];
-					}
-					else {
+					} else {
 						outcount += item["price"];
+						l2[delta_date-1] += item["price"];
 						if (!outData.hasOwnProperty(item["tags"])) outData[item["tags"]] = item["price"];
 						else outData[item["tags"]] += item["price"];
 					}
-					
+					console.log(l1);
 				});
-				
+
 				this.outOpts = {
-					legend:{position: 'bottom'},
-					extra:{ring:{ringWidth: 30,linearType:'custom',centerColor:'#FFF'}},
-					title: {name: "总支出"},
-					subtitle: {name: "￥"+outcount}
+					legend: {
+						position: 'bottom'
+					},
+					extra: {
+						ring: {
+							ringWidth: 30,
+							linearType: 'custom',
+							centerColor: '#FFF'
+						}
+					},
+					title: {
+						name: "总支出"
+					},
+					subtitle: {
+						name: "￥" + outcount
+					}
 				};
 				this.inOpts = {
-					legend:{position: 'bottom'},
-					extra:{ring:{ringWidth: 30,linearType:'custom',centerColor:'#FFF'}},
-					title: {name: "总收入"},
-					subtitle: {name: "￥"+incount}
+					legend: {
+						position: 'bottom'
+					},
+					extra: {
+						ring: {
+							ringWidth: 30,
+							linearType: 'custom',
+							centerColor: '#FFF'
+						}
+					},
+					title: {
+						name: "总收入"
+					},
+					subtitle: {
+						name: "￥" + incount
+					}
 				};
-				console.log(l1);
-				console.log(l2);
-				this.outData = {"series": [{"data": this.dic2list(outData)}]};
-				this.inData = {"series": [{"data": this.dic2list(inData)}]};
-				this.linedata ={
-					categories:[1,".",".",".",".",".",".",".",".",10,".",".",".",".",".",".",".",".",20,".",".",".",".",".",".",".",".",30],
-					series:[
-						{name:"shouru",
-						data:l1
+				this.outData = {
+					"series": [{
+						"data": this.dic2list(outData)
+					}]
+				};
+				this.inData = {
+					"series": [{
+						"data": this.dic2list(inData)
+					}]
+				};
+				this.linedata = {
+					categories: this.datelist(),
+					series: [{
+							name: "收入",
+							data: l1
 						},
-						{name:"outcome",
-						data:l2
+						{
+							name: "支出",
+							data: l2
 						}
 					]
-				}
+				};
 				this.show_chart = true;
-				
 			},
-			
-			reload() {
-				this.category = ''; 
-				this.outData = {"series": [{"data": []}]};
-				this.inData = {"series": [{"data": []}]};
-				this.show_chart = false;
-				var a = this;
-				var date = new Date();
 
-				var sqlWhere = (this.start_date_string == '无') ? '' :' WHERE day >= "' + this.start_date_string + '"'; 
-				sqlWhere += (this.end_date_string == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') +' day <= "' + this.end_date_string + '"'
+			reload() {
+				var sd = Date.parse(this.start_date);
+				var ed = Date.parse(this.end_date);
+				var t = this;
+				this.delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
+				this.category = '';
+				this.outData = {
+					"series": [{
+						"data": []
+					}]
+				};
+				this.inData = {
+					"series": [{
+						"data": []
+					}]
+				};
+				this.show_chart = false;
+
+				var sqlWhere = (this.start_date == '无') ? '' : ' WHERE day >= "' + this.start_date + '"';
+				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') + ' day <= "' + this
+					.end_date + '"'
 				);
 				console.log('select * from database' + sqlWhere);
 				plus.sqlite.selectSql({
 					name: 'moneymap',
 					sql: 'select * from database' + sqlWhere,
 					success: function(e) {
-						a.sql_data = e;
-						a.updateChart();
+						console.log("here1");
+						t.sql_data = e;
+						t.updateChart();
 						uni.stopPullDownRefresh();
 					},
 					fail: function(e) {
 						plus.nativeUI.alert('查询SQL语句失败: ' + JSON.stringify(e));
-						a.sql_data = [];
+						t.sql_data = [];
 						uni.stopPullDownRefresh();
 					}
 				});
-				
 			},
-			
-			outDetail () {
+
+			outDetail() {
 				console.log("ont");
 				uni.navigateTo({
-					url: "detail?type=out&category=" + this.category +"&sql_data=" + JSON.stringify(this.sql_data)
+					url: "detail?type=out&category=" + this.category + "&sql_data=" + JSON.stringify(this.sql_data)
 				});
 			},
-			
-			inDetail () {
+
+			inDetail() {
 				uni.navigateTo({
-					url: "detail?type=in&category=" + this.category +"&sql_data=" + JSON.stringify(this.sql_data)
+					url: "detail?type=in&category=" + this.category + "&sql_data=" + JSON.stringify(this.sql_data)
 				});
 			},
 		}
@@ -297,36 +342,39 @@
 		margin-right: 50rpx;
 		padding: 1 1 1 1;
 	}
-	
+
 	.graph {
 		width: 500rpx;
 		height: 500rpx;
 		margin: unset;
 		padding: unset;
 	}
-	
-	.leave_cont .ul{
+
+	.leave_cont .ul {
 		padding-left: 40rpx;
 	}
-	.leave_cont .ul .li{
+
+	.leave_cont .ul .li {
 		display: flex;
 		align-items: center;
 		border-bottom: 1px solid #aa00ff;
 	}
-	.leave_cont .ul .li text{
+
+	.leave_cont .ul .li text {
 		padding: 20rpx 0;
 		font-size: 24rpx;
 		font-family: '黑体';
 	}
-	.leave_cont .ul .li .flex1{
+
+	.leave_cont .ul .li .flex1 {
 		flex: 1;
 		text-align: right;
 		padding-right: 25rpx;
 		color: #999999;
 		font-size: 22rpx;
 	}
-	.date{
+
+	.date {
 		height: 42rpx;
 	}
-
 </style>
