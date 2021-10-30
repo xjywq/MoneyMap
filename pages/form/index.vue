@@ -165,6 +165,7 @@
 				table_name = 'initial'
 			};
 			this.table_name = table_name
+			createTable('moneymap', this.table_name);
 			this.reload();
 		},
 

@@ -43,15 +43,11 @@
 </template>
 
 <script >
-	import "../../common/basic_method.js"
+	import "@/common/basic_method.js"
 	import {
 		generatesql,
-		openDB,
-		selectSQL,	//not use
-		closeDB,
 		executeSql,
-		movetable,
-	} from "../../common/DB_method.js"
+	} from "@/common/DB_method.js"
 	var graceChecker = require("../../common/graceChecker.js");
 	
 	export default {

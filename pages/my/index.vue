@@ -38,15 +38,20 @@
 				<button class="footer" v-if="check == false" type="default" @tap="logout">退出登录</button>
 			</view>
 		</block>
+		<view class="uni-btn-v"><button type="warn" @click="Droptable">清除数据</button></view>
 	</view>
 </template>
 
 <script>
-	import {moveTable} from '@/common/DB_method.js'
+	import {
+		moveTable,
+		droptable
+	} from '@/common/DB_method.js'
 	export default {
 		data() {
 			return {
 				check: false,
+				db: 'moneymap',
 				password: '',
 				password1: '',
 				hasUserInfo: uni.getStorageSync('hasUserInfo'),
@@ -113,7 +118,7 @@
 									uni.setStorageSync('uni-id', a.username)
 									uni.setStorageSync('hasUserInfo', true)
 									uni.setStorageSync('avatar_path', '')
-									moveTable(a.username, 'initial');
+									moveTable(a.db, a.username, 'initial');
 								} else
 									uni.showModal({
 										showCancel: false,
@@ -157,7 +162,7 @@
 							uni.setStorageSync('uni-id', a.username);
 							uni.setStorageSync('hasUserInfo', true);
 							uni.setStorageSync('avatar_path', '');
-							moveTable(a.username, 'initial');
+							moveTable(a.db, a.username, 'initial');
 						} else
 							uni.showModal({
 								showCancel: false,
@@ -198,8 +203,7 @@
 								});
 								a.password = '';
 								a.password1 = '';
-							}
-							else
+							} else
 								uni.showModal({
 									showCancel: false,
 									content: res.result['errMsg']
@@ -315,10 +319,24 @@
 									})
 								}
 							});
+						}
 					}
-				}});
+				});
+			},
+			Droptable: function() {
+				uni.showModal({
+					title: '警告',
+					content: '您确定要清楚当前全部数据吗, 此操作不可逆!',
+					confirmColor: '#FF0000',
+					success(res) {
+						if (res.confirm) {
+							droptable(this.db, this.table_name);
+						}
+					}
+				})
+			},
 		},
-		}}
+	}
 </script>
 
 <style>
