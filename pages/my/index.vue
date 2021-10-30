@@ -1,18 +1,28 @@
 <template>
 	<view>
 		<page-head :title="title"></page-head>
+		
 		<view class="uni-padding-wrap">
 			<view style="background:#FFF; padding:40rpx;">
 				<block v-if="hasUserInfo === false">
 					<view class="uni-hello-text uni-center">
-						<text>请点击下方按钮获取用户头像及昵称</text>
+						<text>请点击下方按钮获取用户头像及昵称\n</text>
 					</view>
 				</block>
 				<block v-if="hasUserInfo === true">
 					<view class="uni-h4 uni-center uni-common-mt">{{userInfo.nickName || userInfo.email}}</view>
 					<view style="padding:30rpx 0; text-align:center;">
-						<image class="userinfo-avatar" :src="userInfo.avatarUrl"></image>
+						<block v-if="userInfo.avatarUrl === None">
+							<image src="/static/default.jpeg" style="width: 50px;height: 50px;"></image>
+						</block>
+						<block v-else>
+							<image class="userinfo-avatar" :src="userInfo.avatarUrl"></image>
+						</block>
 					</view>
+					<text>{{userInfo.uid}}</text>
+					<button type="default" @tap="fileLoad">上传头像</button>
+					<div slot="tip" class="el-upload-list__item-name">{{fileName}}</div> 
+					<button type="default" @tap="setup">设置</button>
 				</block>
 			</view>
 			<view class="uni-btn-v">
@@ -119,6 +129,39 @@
 		},
 		methods: {
 			...mapMutations(['login']),
+			setup(){},
+			fileLoad() {
+			    uni.chooseImage({
+			        count: 1,
+			        sizeType: ['compressed'],
+			        sourceType: ['album'],
+					crop:{
+						width: 50,
+						height: 50,
+					},
+			        success: function(res) {
+						uniCloud.callFunction({
+							name: 'uni-id-test',
+							data: {
+								action: 'setavatar',
+								params: {
+									uid: this.uid,
+									avatar: res.tempFiles[0]
+								}
+							},
+							success(res){
+								
+							},
+							fail(e) {
+								console.error(e)
+								uni.showModal({
+									showCancel: false,
+									content: '修改失败，请稍后再试'
+								})
+							}
+						})}
+			        });
+			},
 			tologin(provider) {
 				uni.login({
 					provider: provider.id,
@@ -234,7 +277,7 @@
 	.photo {
 		border-radius: 50%;
 		overflow: hidden;
-		height: 200rpx;
-		width: 200rpx;
+		height: 50rpx;
+		width: 50rpx;
 	}
 </style>
