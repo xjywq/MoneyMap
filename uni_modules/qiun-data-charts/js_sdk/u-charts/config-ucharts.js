@@ -199,7 +199,7 @@ const cfu = {
     "extra": {
         "rose": {
             "type": "radius",
-            "minRadius": 20,
+            "minRadius": 50,
             "activeOpacity": 0.5,
             "activeRadius": 10,
             "offsetAngle": 0,

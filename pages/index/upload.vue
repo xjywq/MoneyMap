@@ -8,7 +8,7 @@
 			<form @submit="formSubmit" @reset="formReset" ref="submit_form">
 				<view class="uni-form-item uni-column">
 					<view class="title">价格</view>
-					<input class="uni-input" v-model="price" name="price" focus placeholder="请输入价格" />
+					<input class="uni-input" v-model="price" number="true" name="price" focus placeholder="请输入价格" />
 				</view>
 				<view class="uni-form-item uni-column">
 					<view class="title">标签</view>
@@ -53,19 +53,14 @@
 		movetable,
 	} from "../../common/DB_method.js"
 	var graceChecker = require("../../common/graceChecker.js");
-	var global_setting = require("../../global setting.json");
-	// console.log(global_setting);
-	// console.log(global_setting['UploadSetting']['Tags'][0])
+	
 	export default {
 		data() {
 			var date = new Date();
 			var db = 'moneymap'
-			var table_name = 'initial';
-			var log_in = true;
-			if (log_in) {
-				table_name = 'xiaoming';
-			}
-			// openDB(table_name);
+			var table_name = uni.getStorageSync('uni-id');
+			if (table_name == '') {table_name = 'initial'};
+			var global_setting = require("../../global setting.json");
 			return {
 				price: '',
 				tag: '',
@@ -76,28 +71,7 @@
 				income: true,
 				db: db,
 				table_name: table_name,
-				radioItems: [{
-						value: global_setting['UploadSetting']['Tags'][0],
-						// value: '餐饮',
-						checked: 'true'
-					},
-					{
-						value: global_setting['UploadSetting']['Tags'][1],
-						// value: '娱乐'
-					},
-					{
-						value: global_setting['UploadSetting']['Tags'][2],
-						// value: '生活'
-					},
-					{
-						value: global_setting['UploadSetting']['Tags'][3],
-						// value: '学习'
-					},
-					{
-						value: global_setting['UploadSetting']['Tags'][4],
-						// value: '交通'
-					}
-				],
+				radioItems: global_setting['UploadSetting']['Tags'],
 			}
 		},
 		methods: {
@@ -111,7 +85,6 @@
 				}
 			},
 			formSubmit: function(e) {
-				console.log('form发生了submit事件，携带数据为：' + JSON.stringify(e.detail.value))
 				//定义表单规则
 				var rule = [{
 					name: "price",

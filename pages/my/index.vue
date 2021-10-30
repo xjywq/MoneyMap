@@ -1,283 +1,337 @@
 <template>
-	<view>
-		<page-head :title="title"></page-head>
-		
-		<view class="uni-padding-wrap">
-			<view style="background:#FFF; padding:40rpx;">
-				<block v-if="hasUserInfo === false">
-					<view class="uni-hello-text uni-center">
-						<text>请点击下方按钮获取用户头像及昵称\n</text>
-					</view>
-				</block>
-				<block v-if="hasUserInfo === true">
-					<view class="uni-h4 uni-center uni-common-mt">{{userInfo.nickName || userInfo.email}}</view>
-					<view style="padding:30rpx 0; text-align:center;">
-						<block v-if="userInfo.avatarUrl === None">
-							<image src="/static/default.jpeg" style="width: 50px;height: 50px;"></image>
-						</block>
-						<block v-else>
-							<image class="userinfo-avatar" :src="userInfo.avatarUrl"></image>
-						</block>
-					</view>
-					<text>{{userInfo.uid}}</text>
-					<button type="default" @tap="fileLoad">上传头像</button>
-					<div slot="tip" class="el-upload-list__item-name">{{fileName}}</div> 
-					<button type="default" @tap="setup">设置</button>
-				</block>
-			</view>
-			<view class="uni-btn-v">
-				<!-- #ifdef APP-PLUS || MP-ALIPAY || MP-TOUTIAO -->
-				<button type="primary" @click="getUserInfo">获取用户信息</button>
-				<!-- #endif -->
-				<!-- #ifdef MP-WEIXIN || MP-BAIDU || MP-QQ -->
-				<button type="primary" open-type="getUserInfo" @getuserinfo="mpGetUserInfo">获取用户信息</button>
-				<!-- #endif -->
-				<button @click="clear">清空</button>
-			</view>
+	<view class="content">
+		<view class="uni-flex uni-row" style="-webkit-justify-content: flex-end;justify-content: flex-end;">
+			<image src="@/static/设置.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
 		</view>
-		<view class="uni-padding-wrap">
-			<view style="background:#FFF; padding:40rpx;">
-				<block v-if="hasLogin === true">
-					<view class="uni-h3 uni-center uni-common-mt">已登录</view>
-					<view class="uni-hello-text uni-center">
-						<text>每个账号仅需登录 1 次，\n后续每次进入页面即可自动拉取用户信息。</text>
-					</view>
-				</block>
-				<block v-if="hasLogin === false">
-					<view class="uni-h3 uni-center uni-common-mt">未登录</view>
-					<view class="uni-hello-text uni-center">
-						请点击按钮登录
-					</view>
-				</block>
+		<block v-if="hasUserInfo == false">
+			<view class="uni-center" style="font-size:0;">
+				<image src="/static/default.jpeg"
+					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
+				<view class="uni-h2 uni-center uni-common-mt">未登录</view>
+				<input type="text" v-model="username" placeholder="用户名/邮箱/手机号" />
+				<input type="text" v-model="password" password="true" placeholder="密码" />
+				<input v-if="check == true" type="text" v-model="password1" password="true" placeholder="确认密码" />
 			</view>
-			<view class="uni-btn-v uni- uni-common-mt">
-				<!-- #ifdef MP-TOUTIAO -->
-				<button type="primary" class="page-body-button" v-for="(value,key) in providerList"
-					@click="tologin(value)" :key="key">
-					登录
-				</button>
-				<!-- #endif -->
-				<!-- #ifndef MP-TOUTIAO -->
-				<button type="primary" class="page-body-button" v-for="(value,key) in providerList"
-					@click="tologin(value)" :key="key">{{value.name}}</button>
-				<!-- #endif -->
+			<view class="uni-flex uni-row" style="-webkit-justify-content: center;justify-content: center;">
+				<button v-if="check == true" type="default" @tap="register">确认</button>
+				<button v-if="check == false" type="default" @tap="regis">注册</button>
+				<button v-if="check == false" type="default" @tap="login">登录</button>
 			</view>
-		</view>
+		</block>
+
+		<block v-if="hasUserInfo == true">
+			<view @click="fileLoad" class="uni-center">
+				<image v-if="avatar_path == ''" src="/static/default.jpeg"
+					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
+				<image v-else :src="avatar_path"
+					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
+			</view>
+			<view class="uni-h2 uni-center">{{username}}</view>
+			<view class="uni-center" style="background:#FFFFFF; font-size:0;">
+				<input v-if="check == true" type="text" v-model="password" password="true" placeholder="输入旧密码" />
+				<input v-if="check == true" type="text" v-model="password1" password="true" placeholder="输入新密码" />
+			</view>
+			<view class="uni-flex uni-row" style="-webkit-justify-content: center;justify-content: center;">
+				<!-- <button v-if="check == false" type="default" @tap="fileLoad">上传头像</button> -->
+				<button v-if="check == true" type="default" @tap="updatePwd">确认</button>
+				<button v-if="check == false" type="default" @tap="update">修改密码</button>
+				<button class="footer" v-if="check == false" type="default" @tap="logout">退出登录</button>
+			</view>
+		</block>
 	</view>
 </template>
-<script>
-	import {
-		mapState,
-		mapMutations
-	} from 'vuex'
 
+<script>
+	import {moveTable} from '@/common/DB_method.js'
 	export default {
 		data() {
 			return {
-				title: 'login',
-				hasUserInfo: false,
-				userInfo: {},
-				providerList: []
+				check: false,
+				password: '',
+				password1: '',
+				hasUserInfo: uni.getStorageSync('hasUserInfo'),
+				username: uni.getStorageSync('uni-id'),
+				avatar_path: uni.getStorageSync('avatar_path'),
 			}
 		},
-		computed: {
-			...mapState(['hasLogin'])
-		},
-		onLoad() {
-			uni.getProvider({
-				service: 'oauth',
-				success: (result) => {
-					this.providerList = result.provider.map((value) => {
-						let providerName = '';
-						switch (value) {
-							case 'weixin':
-								providerName = '微信登录'
-								break;
-							case 'qq':
-								providerName = 'QQ登录'
-								break;
-							case 'sinaweibo':
-								providerName = '新浪微博登录'
-								break;
-							case 'xiaomi':
-								providerName = '小米登录'
-								break;
-							case 'alipay':
-								providerName = '支付宝登录'
-								break;
-							case 'baidu':
-								providerName = '百度登录'
-								break;
-							case 'toutiao':
-								providerName = '头条登录'
-								break;
-							case 'apple':
-								providerName = '苹果登录'
-								break;
-						}
-						return {
-							name: providerName,
-							id: value
-						}
-					});
-
-				},
-				fail: (error) => {
-					console.log('获取登录通道失败', error);
-				}
-			});
-		},
 		methods: {
-			...mapMutations(['login']),
-			setup(){},
-			fileLoad() {
-			    uni.chooseImage({
-			        count: 1,
-			        sizeType: ['compressed'],
-			        sourceType: ['album'],
-					crop:{
-						width: 50,
-						height: 50,
-					},
-			        success: function(res) {
+			setup() {
+				console.log("nothing happened!");
+			},
+			regis() {
+				this.check = true;
+			},
+			update() {
+				this.check = true;
+			},
+			register() {
+				if (this.password1 != this.password) {
+					uni.showModal({
+						showCancel: false,
+						content: "两次输入的密码不同！"
+					})
+				} else {
+					var i = 0;
+					while (i < this.username.length) {
+						if ((this.username[i] >= 'a' && this.username[i] <= 'z') || (this.username[i] >= 'A' && this
+								.username[i] <= 'Z') || (i != 0 && this.username[i] >= '0' && this.username[i] <= '9'))
+							i += 1;
+						else
+							break;
+					}
+					if (this.password == '' || this.username == '') {
+						uni.showModal({
+							showCancel: false,
+							content: "不能为空！"
+						})
+					} else if (i < this.username.length) {
+						uni.showModal({
+							showCancel: false,
+							content: "非法用户名！\n请注意用户名只能由英文字母和数字组成, 且第一个字符必须为英文"
+						})
+					} else {
 						uniCloud.callFunction({
 							name: 'uni-id-test',
 							data: {
-								action: 'setavatar',
+								action: 'register',
 								params: {
-									uid: this.uid,
-									avatar: res.tempFiles[0]
+									username: this.username,
+									password: this.password,
+									needPermission: false
 								}
 							},
-							success(res){
-								
+							success(res) {
+								console.log(JSON.stringify(res.result))
+								if (res.result['errMsg'] == "") {
+									uni.showModal({
+										showCancel: false,
+										content: "注册成功！"
+									})
+									a.hasUserInfo = true
+									a.password = '';
+									a.password1 = '';
+									uni.setStorageSync('uni-id', a.username)
+									uni.setStorageSync('hasUserInfo', true)
+									uni.setStorageSync('avatar_path', '')
+									moveTable(a.username, 'initial');
+								} else
+									uni.showModal({
+										showCancel: false,
+										content: res.result['errMsg']
+									})
 							},
 							fail(e) {
 								console.error(e)
 								uni.showModal({
 									showCancel: false,
-									content: '修改失败，请稍后再试'
+									content: '注册失败，请稍后再试'
 								})
 							}
-						})}
-			        });
-			},
-			tologin(provider) {
-				uni.login({
-					provider: provider.id,
-					// #ifdef MP-ALIPAY
-					scopes: 'auth_user', //支付宝小程序需设置授权类型
-					// #endif
-					success: (res) => {
-						console.log('login success:', res);
-						// 更新保存在 store 中的登录状态
-						this.login(provider.id);
-						// #ifdef MP-WEIXIN
-						console.warn('如需获取openid请参考uni-id: https://uniapp.dcloud.net.cn/uniCloud/uni-id')
-						uni.request({
-							url: 'https://97fca9f2-41f6-449f-a35e-3f135d4c3875.bspapp.com/http/user-center',
-							method: 'POST',
-							data: {
-								action: 'loginByWeixin',
-								params: {
-									code: res.code,
-									platform: 'mp-weixin'
-								}
-							},
-							success(res) {
-								console.log(res);
-								if (res.data.code !== 0) {
-									console.log('获取openid失败：', res.result.msg);
-									return
-								}
-								uni.setStorageSync('openid', res.data.openid)
-							},
-							fail(err) {
-								console.log('获取openid失败：', err);
-							}
 						})
-						// #endif
-					},
-					fail: (err) => {
-						console.log('login fail:', err);
 					}
-				});
+				}
+				this.check = false;
+				this.password1 = ""
 			},
-			// 获取用户信息 API 在小程序可直接使用，在 5+App 里面需要先登录才能调用
-			getUserInfo() {
-				uni.getUserInfo({
-					provider: this.loginProvider,
-					success: (result) => {
-						console.log('getUserInfo success', result);
-						this.hasUserInfo = true;
-						this.userInfo = result.userInfo;
-					},
-					fail: (error) => {
-						console.log('getUserInfo fail', error);
-						let content = error.errMsg;
-						if (~content.indexOf('uni.login')) {
-							content = '请在登录页面完成登录操作';
+			login() {
+				var a = this
+				uniCloud.callFunction({
+					name: 'uni-id-test',
+					data: {
+						action: 'login',
+						params: {
+							username: a.username,
+							password: a.password,
+							needPermission: false
 						}
-			            // #ifndef APP-PLUS
-						uni.getSetting({
-							success: (res) => {
-								let authStatus = res.authSetting['scope.userInfo'];
-								if (!authStatus) {
-									uni.showModal({
-										title: '授权失败',
-										content: 'Hello uni-app需要获取您的用户信息，请在设置界面打开相关权限',
-										success: (res) => {
-											if (res.confirm) {
-												uni.openSetting()
-											}
+					},
+					success(res) {
+						if (res.result['errMsg'] == "") {
+							uni.showModal({
+								showCancel: false,
+								content: "登录成功！"
+							})
+							a.hasUserInfo = true
+							a.password = '';
+							a.password1 = '';
+							uni.setStorageSync('uni-id', a.username);
+							uni.setStorageSync('hasUserInfo', true);
+							uni.setStorageSync('avatar_path', '');
+							moveTable(a.username, 'initial');
+						} else
+							uni.showModal({
+								showCancel: false,
+								content: res.result['errMsg']
+							})
+					},
+					fail(e) {
+						console.error(e)
+						uni.showModal({
+							showCancel: false,
+							content: '登录失败，请稍后再试'
+						})
+					}
+				})
+			},
+			updatePwd() {
+				if (this.password1 == "") {
+					uni.showModal({
+						showCancel: false,
+						content: "密码不能为空！"
+					})
+				} else {
+					var a = this;
+					uniCloud.callFunction({
+						name: 'uni-id-test',
+						data: {
+							action: 'updatePwd',
+							params: {
+								oldPassword: a.password,
+								newPassword: a.password1
+							}
+						},
+						success(res) {
+							if (res.result['errMsg'] == "") {
+								uni.showModal({
+									showCancel: false,
+									content: "修改成功"
+								});
+								a.password = '';
+								a.password1 = '';
+							}
+							else
+								uni.showModal({
+									showCancel: false,
+									content: res.result['errMsg']
+								})
+						},
+						fail(e) {
+							console.error(e)
+							uni.showModal({
+								showCancel: false,
+								content: '修改失败，请稍后再试'
+							})
+						}
+					})
+				}
+				this.check = false;
+			},
+			resetPwd() {
+				uniCloud.callFunction({
+					name: 'uni-id-test',
+					data: {
+						action: 'resetPwd',
+					},
+					success(res) {
+						if (res.result.code === 0) {
+							uni.showModal({
+								showCancel: false,
+								content: '密码已重置为123456'
+							})
+						} else {
+							uni.showModal({
+								showCancel: false,
+								content: JSON.stringify(res.result)
+							})
+						}
+					},
+					fail(e) {
+						console.error(e)
+						uni.showModal({
+							showCancel: false,
+							content: '重置失败，请稍后再试'
+						})
+					}
+				})
+			},
+			logout() {
+				var a = this;
+				uni.showModal({
+					title: '警告',
+					showCancel: true,
+					content: '您确定要退出登录吗?\n再次登录以恢复数据',
+					success(res) {
+						if (res.confirm) {
+							a.username = '';
+							a.hasUserInfo = false;
+							a.avatar_path = '';
+							uni.setStorageSync('uni-id', '');
+							uni.setStorageSync('avatar_path', '');
+							uni.setStorageSync('hasUserInfo', false);
+						}
+					}
+				})
+			},
+			fileLoad() {
+				var a = this;
+				uni.showActionSheet({
+					itemList: ["查看头像", "从相册选择图片"],
+					success(e) {
+						var index = e.tapIndex
+						console.log("!!!")
+						if (index === 0) {
+							let arr = [a.avatar_path]
+							uni.previewImage({
+								urls: arr
+							})
+						} else if (index === 1) {
+							uni.chooseImage({
+								count: 1,
+								sizeType: ['compressed'],
+								sourceType: ['album'],
+								crop: {
+									width: 50,
+									height: 50,
+								},
+								success: function(res) {
+									a.avatar_path = res.tempFilePaths["0"]
+									uni.saveFile({
+										tempFilePath: a.avatar_path,
+										success: function(res) {
+											a.avatar_path = res.savedFilePath;
+											console.log(a.avatar_path)
+										}
+									});
+
+									uni.setStorageSync('avatar_path', a.avatar_path)
+									uniCloud.callFunction({
+										name: 'uni-id-test',
+										data: {
+											action: 'setavatar',
+											params: {
+												avatar: a.avatar_path
+											},
+										},
+										success(res) {
+											console.log(res)
+										},
+										fail(e) {
+											console.error(e)
+											uni.showModal({
+												showCancel: false,
+												content: '上传失败，请稍后再试'
+											})
 										}
 									})
-								} else {
-									uni.showModal({
-										title: '获取用户信息失败',
-										content: '错误原因1' + content,
-										showCancel: false
-									});
 								}
-							}
-						})
-			            // #endif
-			            // #ifdef APP-PLUS
-			            uni.showModal({
-			            	title: '获取用户信息失败',
-			            	content: '错误原因2' + content,
-			            	showCancel: false
-			            });
-			            // #endif
+							});
 					}
-				});
-			},
-			mpGetUserInfo(result) {
-				console.log('mpGetUserInfo', result);
-				if (result.detail.errMsg !== 'getUserInfo:ok') {
-					uni.showModal({
-						title: '获取用户信息失败',
-						content: '错误原因3' + result.detail.errMsg,
-						showCancel: false
-					});
-					return;
-				}
-				this.hasUserInfo = true;
-				this.userInfo = result.detail.userInfo;
-			},
-			clear() {
-				this.hasUserInfo = false;
-				this.userInfo = {};
-			}
-		}
-	}
+				}});
+		},
+		}}
 </script>
 
 <style>
-	.photo {
-		border-radius: 50%;
-		overflow: hidden;
-		height: 50rpx;
-		width: 50rpx;
+	input {
+		display: block;
+		width: 100%;
+		height: 34px;
+		padding: 6px 12px;
+		font-size: 14px;
+		line-height: 1.428571429;
+		vertical-align: middle;
+		background-color: #FFFFFF;
+		border-radius: 4px;
+		transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
 	}
 </style>

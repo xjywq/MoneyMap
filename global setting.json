@@ -4,9 +4,25 @@
 		"DayLimit": 100
 	},
 	"UploadSetting": {
-		"Tags": [
-			"餐饮", "娱乐", "学习", "生活", "交通"
-		],
-		"DefaultTag": "餐饮"
+		"Tags": [{
+				"value": "餐饮",
+				"checked": "true"
+			},
+			{
+				"value": "娱乐"
+			},
+			{
+				"value": "生活"
+			},
+			{
+				"value": "学习"
+			},
+			{
+				"value": "交通"
+			},
+			{
+				"value": "其他"
+			}
+		]
 	}
 }

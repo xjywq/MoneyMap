@@ -1,84 +1,72 @@
 <template>
 	<view>
 		<!-- <div class="container"> -->
-			<div class="container DataContainer">
-				<qiun-title-bar :title="'日期: ' + date" />
-			</div>
-			<div class="container ChartContainer">
-				<!-- <h1 class="title">我的账单</h1> -->
-				<!-- <text>本月支出</text>
-				<view id="main" class="graph">
-					<echarts :option="option" style="width: 100%; height: 100%" @click="echartsClick"></echarts>
-				</view> -->
-				<!-- <text>本月支出</text> -->
-				<qiun-title-bar title="统计时间" />
-				<view class="leave_cont">
-					<view class="ul">
-						<view class="li">
-							<text>开始时间</text>
-							<view class="flex1">
-								<picker mode="date" :end="(end_date == '无') ? date: end_date" @change="bindDateChange">
-									<view class="date" @longpress="start_date = '无'">{{start_date}}</view>
-								</picker>
-							</view>
-						</view>
-						<view class="li">
-							<text>结束时间</text>
-							<view class="flex1">
-								<picker mode="date" :start="(start_date == '无') ? '1970-01-01': start_date" :end="date"
-									@change="bindDateChange2">
-									<view class="date" @longpress="end_date = '无'">{{end_date}}</view>
-								</picker>
-							</view>
+		<div class="container DataContainer">
+			<qiun-title-bar :title="'日期: ' + date" />
+		</div>
+		<div class="container ChartContainer">
+			<qiun-title-bar title="统计时间" />
+			<view class="leave_cont">
+				<view class="ul">
+					<view class="li">
+						<text>开始时间</text>
+						<view class="flex1">
+							<picker mode="date" :end="(end_date == '无') ? date: end_date" @change="bindDateChange">
+								<view class="date" @longpress="start_date = '无'">{{start_date}}</view>
+							</picker>
 						</view>
 					</view>
-				</view><br>
+					<view class="li">
+						<text>结束时间</text>
+						<view class="flex1">
+							<picker mode="date" :start="(start_date == '无') ? '1970-01-01': start_date" :end="date"
+								@change="bindDateChange2">
+								<view class="date" @longpress="end_date = '无'">{{end_date}}</view>
+							</picker>
+						</view>
+					</view>
+				</view>
+			</view><br>
 
-				<qiun-title-bar title="收支总览" />
-				
-				<uni-table border stripe emptyText="暂无更多数据" >
-					<!-- 表头行 -->
-					<uni-tr>
-						<uni-th align="center" width=80%>支出</uni-th>
-						<uni-th align="center" width=80%>收入</uni-th>
-						<uni-th align="center" width=80%>结余</uni-th>
-					</uni-tr>
-					<!-- 表格数据行 -->
-					<uni-tr>
-						<uni-td align="center" v-for="(record, index) in outOpts['subtitle']"><span>{{record}}</span></uni-td>
-						<uni-td align="center" v-for="(record, index) in inOpts['subtitle']"><span>{{record}}</span></uni-td>
-						<uni-td align = "center" v-for="(record, index) in subOpts['subtitle']"><span>{{record}}</span></uni-td>
-					</uni-tr>
-				</uni-table>
-				</script>
-				
-				<qiun-title-bar title="收支折线图" />
-				<view class="line-box">
-					<qiun-data-charts type="line" 
-					:chartData="linedata"
-					
-					:ontouch="true"/>
-				</view>
+			<qiun-title-bar title="收支总览" />
 
-				<qiun-title-bar title="支出情况" />
-				<view class="charts-box">
-					<qiun-data-charts type="rose" :opts="outOpts" :chartData="outData" />
-				</view>
+			<uni-table border stripe emptyText="暂无更多数据">
+				<!-- 表头行 -->
+				<uni-tr>
+					<uni-th align="center" width=80%>支出</uni-th>
+					<uni-th align="center" width=80%>收入</uni-th>
+					<uni-th align="center" width=80%>结余</uni-th>
+				</uni-tr>
+				<!-- 表格数据行 -->
+				<uni-tr>
+					<uni-td align="center" v-for="(record, index) in outOpts['subtitle']"><text style="color: #FF0000;">￥{{record}}</text>
+					</uni-td>
+					<uni-td align="center" v-for="(record, index) in inOpts['subtitle']"><text>￥{{record}}</text>
+					</uni-td>
+					<uni-td align="center" v-for="(record, index) in subOpts['subtitle']">
+						<view v-if="record>=0"><text>￥{{record}}</text></view>
+						<view v-if="record<0"><text style="color: #FF0000;">￥{{record}}</text></view>
+					</uni-td>
+				</uni-tr>
+			</uni-table>
+			</script>
 
-				<qiun-title-bar title="收入情况" />
-				<view class="charts-box" @longpress="inDetail">
-					<qiun-data-charts type="rose" :opts="inOpts" :chartData="inData" />
-				</view>
-				<button @click="updateClick">刷新</button>
-				<qiun-title-bar title="预计支出" />
-				<view class="char-box">
-					<qiun-data-charts
-					type="arcbar"
-					:chartData="cdata"
-					background="none"
-				/>
-				</view>
-			</div>
+			<qiun-title-bar title="收支折线图" />
+			<view class="line-box">
+				<qiun-data-charts type="line" :chartData="linedata" :ontouch="true" />
+			</view>
+
+			<qiun-title-bar title="支出情况" />
+			<view class="charts-box">
+				<qiun-data-charts type="rose" :opts="outOpts" :chartData="outData" />
+			</view>
+
+			<qiun-title-bar title="收入情况" />
+			<view class="charts-box" @longpress="inDetail">
+				<qiun-data-charts type="rose" :opts="inOpts" :chartData="inData" />
+			</view>
+			<button @click="updateClick">刷新</button>
+		</div>
 		<!-- </div> -->
 
 
@@ -133,7 +121,7 @@
 	import {
 		generatesql,
 		openDB,
-		selectSQL,
+		createTable,
 		closeDB,
 		executeSql
 	} from "@/common/DB_method.js"
@@ -142,6 +130,10 @@
 		data() {
 			var date1 = new Date();
 			var startdate = new Date(date1);
+			var table_name = uni.getStorageSync('uni-id');
+			if (table_name == '') {
+				table_name = 'initial'
+			};
 			startdate.setDate(date1.getDate() - 7);
 			return {
 				start_date: startdate.format("YYYY-MM-DD"),
@@ -153,10 +145,9 @@
 				inOpts: {},
 				subOpts: {},
 				linedata: {},
-				cdata:{},
 				sql_data: [],
 				date: date1.format("YYYY-MM-DD"),
-				sql: 'select * from database',
+				table_name: table_name,
 				option: {},
 				show_chart: true,
 				category: '',
@@ -164,17 +155,23 @@
 		},
 
 		onLoad: function() {
+			createTable('moneymap', this.table_name);
 			this.reload();
 		},
 
 		onShow: function() {
+			var table_name = uni.getStorageSync('uni-id');
+			if (table_name == '') {
+				table_name = 'initial'
+			};
+			this.table_name = table_name
 			this.reload();
 		},
 
 		onPullDownRefresh: function(a) {
 			this.updateClick();
 		},
-		
+
 		methods: {
 			bindDateChange: function(e) {
 				this.start_date = e.target.value;
@@ -222,16 +219,15 @@
 				for (var i = 0; i < this.delta_date; i++) {
 					var getdate = new Date();
 					var newdate = new Date(getdate);
-					newdate.setDate(getdate.getDate()-this.delta_date+i)
-					if(i==0 || (i+1) %15 ==0){
+					newdate.setDate(getdate.getDate() - this.delta_date + i)
+					if (i == 0 || (i + 1) % 15 == 0) {
 						l.push(newdate.format('MM-DD'));
-					}
-					else l.push('');
+					} else l.push('');
 				}
 				return l;
 			},
 
-			
+
 			updateChart() {
 				var sql_data = this.sql_data;
 				var outcount = 0,
@@ -239,27 +235,28 @@
 				var outData = {},
 					inData = {};
 				var linedata = {};
-				var in_co = {}, out_co = {}, sub_co ={};
+				var in_co = {},
+					out_co = {},
+					sub_co = {};
 				var l1 = this.datelist(),
 					l2 = this.datelist();
 				var sd = Date.parse(this.start_date);
-				
+
 				sql_data.forEach(function(item) {
 					var ed = Date.parse(item["day"]);
 					var delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
 					//console.log(delta_date);
 					if (item["income"] == "true") {
 						incount += item["price"];
-						l1[delta_date-1] += item["price"];
+						l1[delta_date - 1] += item["price"];
 						if (!inData.hasOwnProperty(item["tags"])) inData[item["tags"]] = item["price"];
 						else inData[item["tags"]] += item["price"];
 					} else {
 						outcount += item["price"];
-						l2[delta_date-1] += item["price"];
+						l2[delta_date - 1] += item["price"];
 						if (!outData.hasOwnProperty(item["tags"])) outData[item["tags"]] = item["price"];
 						else outData[item["tags"]] += item["price"];
 					}
-					//console.log(l1);
 				});
 				this.outOpts = {
 					legend: {
@@ -276,7 +273,7 @@
 						name: "总支出"
 					},
 					subtitle: {
-						name: "￥-" + outcount
+						name: outcount
 					}
 				};
 				this.inOpts = {
@@ -294,19 +291,20 @@
 						name: "总收入"
 					},
 					subtitle: {
-						name: "￥" + incount
+						name: incount
 					}
 				};
-				this.subOpts = {subtitle: {
-						name: "￥" + (incount-outcount)
-					}};
-				//console.log(this.inOpts["subtitle"]["name"]);
+
+				this.subOpts = {
+					subtitle: {
+						name: incount - outcount
+					}
+				};
 				this.outData = {
 					"series": [{
 						"data": this.dic2list(outData)
 					}]
 				};
-				console.log(this.outData);
 				this.inData = {
 					"series": [{
 						"data": this.dic2list(inData)
@@ -323,16 +321,6 @@
 							data: l2
 						}
 					]
-				};
-				console.log(outcount);
-				this.cdata =
-				{
-				    "series": [
-				        {
-				            "data": outcount/2000,
-				            "color": "#ff0202"
-				        }
-				    ]
 				};
 				this.show_chart = true;
 			},
@@ -356,15 +344,12 @@
 				this.show_chart = false;
 
 				var sqlWhere = (this.start_date == '无') ? '' : ' WHERE day >= "' + this.start_date + '"';
-				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') + ' day <= "' + this
-					.end_date + '"'
+				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') + ' day <= "' + this.end_date + '"'
 				);
-				console.log('select * from database' + sqlWhere);
 				plus.sqlite.selectSql({
 					name: 'moneymap',
-					sql: 'select * from database' + sqlWhere,
+					sql: 'select * from ' + this.table_name + sqlWhere,
 					success: function(e) {
-						console.log("here1");
 						t.sql_data = e;
 						t.updateChart();
 						uni.stopPullDownRefresh();
@@ -437,18 +422,19 @@
 	.date {
 		height: 42rpx;
 	}
-	
-	.charts-box{
-	  width: 100%;
-	  height:300px;
-	}
-	
-	.line-box{
+
+	.charts-box {
 		width: 100%;
-		height:200px;
+		height: 300px;
 	}
-	.char-box{
+
+	.line-box {
 		width: 100%;
-		height:200px;
+		height: 200px;
+	}
+
+	.char-box {
+		width: 100%;
+		height: 200px;
 	}
 </style>
