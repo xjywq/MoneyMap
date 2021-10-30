@@ -324,13 +324,14 @@
 				});
 			},
 			Droptable: function() {
+				var a = this;
 				uni.showModal({
 					title: '警告',
 					content: '您确定要清楚当前全部数据吗, 此操作不可逆!',
 					confirmColor: '#FF0000',
 					success(res) {
 						if (res.confirm) {
-							droptable(this.db, this.table_name);
+							droptable(a.db, a.username);
 						}
 					}
 				})

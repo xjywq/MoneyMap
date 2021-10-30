@@ -67,7 +67,7 @@ export function droptable(db, table_name) {
 		name: db,
 		sql: 'drop table ' + table_name,
 		success: function(e) {
-			// console.log('删除表成功');
+			console.log('删除表成功');
 		},
 		fail: function(e) {
 			console.warn('删除表失败: ' + JSON.stringify(e));
@@ -98,7 +98,7 @@ export function executeSql(db, sql_table, sql_query) {
 				name: db,
 				sql: sql_query,
 				success: function(e) {
-					// plus.nativeUI.alert('创建表table和插入数据成功');
+					// console.log('创建表table和插入数据成功');
 				},
 				fail: function(e) {
 					console.warn('插入数据失败: ' + JSON.stringify(e));

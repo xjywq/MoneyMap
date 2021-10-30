@@ -56,13 +56,13 @@
 				<qiun-data-charts type="line" :chartData="linedata" :ontouch="true" />
 			</view>
 
-			<qiun-title-bar title="支出情况" />
-			<view class="charts-box">
+			<qiun-title-bar v-if="outData.series[0].data.length" title="支出情况" />
+			<view v-if="outData.series[0].data.length" class="charts-box">
 				<qiun-data-charts type="rose" :opts="outOpts" :chartData="outData" />
 			</view>
-
-			<qiun-title-bar title="收入情况" />
-			<view class="charts-box" @longpress="inDetail">
+			
+			<qiun-title-bar v-if="inData.series[0].data.length" title="收入情况" />
+			<view v-if="inData.series[0].data.length" class="charts-box" @longpress="inDetail">
 				<qiun-data-charts type="rose" :opts="inOpts" :chartData="inData" />
 			</view>
 			<button @click="updateClick">刷新</button>
@@ -247,7 +247,7 @@
 					var ed = Date.parse(item["day"]);
 					var delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
 					//console.log(delta_date);
-					if (item["income"] == "true") {
+					if (item["income"] == 1) {
 						incount += item["price"];
 						l1[delta_date - 1] += item["price"];
 						if (!inData.hasOwnProperty(item["tags"])) inData[item["tags"]] = item["price"];
@@ -364,7 +364,6 @@
 			},
 
 			outDetail() {
-				console.log("ont");
 				uni.navigateTo({
 					url: "detail?type=out&category=" + this.category + "&sql_data=" + JSON.stringify(this.sql_data)
 				});
