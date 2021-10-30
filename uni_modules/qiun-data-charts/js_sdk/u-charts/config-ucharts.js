@@ -145,29 +145,94 @@ const cfu = {
 			},
 		},
 	},
-	"rose":{
-		"type": "rose",
-    "color": color,
-		"padding": [5,5,5,5],
-		"legend": {
-			"show": true,
-			"position": "left",
-      "lineHeight": 25,
-		},
-		"extra": {
-			"rose": {
-				"type": "area",
-				"minRadius": 50,
-				"activeOpacity": 0.5,
-				"activeRadius": 10,
-				"offsetAngle": 0,
-				"labelWidth": 15,
-				"border": false,
-				"borderWidth": 2,
-				"borderColor": "#FFFFFF"
-			},
-		}
-	},
+"rose":{
+    "type": "rose",
+    "canvasId": "",
+    "canvas2d": false,
+    "background": "none",
+    "animation": true,
+    "timing": "easeOut",
+    "duration": 1000,
+    "color": [
+        "#1890FF",
+        "#91CB74",
+        "#FAC858",
+        "#EE6666",
+        "#73C0DE",
+        "#3CA272",
+        "#FC8452",
+        "#9A60B4",
+        "#ea7ccc"
+    ],
+    "padding": [
+        5,
+        5,
+        5,
+        5
+    ],
+    "rotate": false,
+    "errorReload": true,
+    "fontSize": 13,
+    "fontColor": "#666666",
+    "enableScroll": false,
+    "touchMoveLimit": 60,
+    "enableMarkLine": false,
+    "dataLabel": true,
+    "dataPointShape": true,
+    "dataPointShapeType": "solid",
+    "tapLegend": true,
+    "legend": {
+        "show": true,
+        "position": "left",
+        "float": "center",
+        "padding": 5,
+        "margin": 5,
+        "backgroundColor": "rgba(0,0,0,0)",
+        "borderColor": "rgba(0,0,0,0)",
+        "borderWidth": 0,
+        "fontSize": 13,
+        "fontColor": "#666666",
+        "lineHeight": 25,
+        "hiddenColor": "#CECECE",
+        "itemGap": 10
+    },
+    "extra": {
+        "rose": {
+            "type": "radius",
+            "minRadius": 50,
+            "activeOpacity": 0.5,
+            "activeRadius": 10,
+            "offsetAngle": 0,
+            "labelWidth": 30,
+            "border": false,
+            "borderWidth": 2,
+            "borderColor": "#FFFFFF",
+            "linearType": "custom"
+        },
+        "tooltip": {
+            "showBox": true,
+            "showArrow": true,
+            "showCategory": false,
+            "borderWidth": 0,
+            "borderRadius": 0,
+            "borderColor": "#000000",
+            "borderOpacity": 0.7,
+            "bgColor": "#000000",
+            "bgOpacity": 0.7,
+            "gridType": "solid",
+            "dashLength": 4,
+            "gridColor": "#CCCCCC",
+            "fontColor": "#FFFFFF",
+            "splitLine": true,
+            "horizentalLine": false,
+            "xAxisLabel": false,
+            "yAxisLabel": false,
+            "labelBgColor": "#FFFFFF",
+            "labelBgOpacity": 0.7,
+            "labelFontColor": "#666666"
+        }
+    }
+},
 	"word":{
 		"type": "word",
     "color": color,
@@ -194,6 +259,7 @@ const cfu = {
 			},
 		}
 	},
+	
 	"map":{
 		"type": "map",
     "color": color,
@@ -211,50 +277,87 @@ const cfu = {
 			},
 		}
 	},
+	
 	"arcbar":{
-		"type": "arcbar",
-    "color": color,
-		"title": {
-			"name": "百分比",
-			"fontSize": 25,
-			"color": "#00FF00"
-		},
-		"subtitle": {
-			"name": "默认标题",
-			"fontSize": 15,
-			"color": "#666666"
-		},
-		"extra": {
-			"arcbar": {
-				"type": "default",
-				"width": 12,
-				"backgroundColor": "#E9E9E9",
-				"startAngle": 0.75,
-				"endAngle": 0.25,
-				"gap": 2
-			}
-		}
+	    "type": "arcbar",
+	    "canvasId": "",
+	    "canvas2d": false,
+	    "background": "none",
+	    "animation": true,
+	    "timing": "easeOut",
+	    "duration": 1000,
+	    "color": [
+	        "#1890FF",
+	        "#91CB74",
+	        "#FAC858",
+	        "#EE6666",
+	        "#73C0DE",
+	        "#3CA272",
+	        "#FC8452",
+	        "#9A60B4",
+	        "#ea7ccc"
+	    ],
+	    "rotate": false,
+	    "errorReload": true,
+	    "fontSize": 13,
+	    "fontColor": "#666666",
+	    "enableScroll": false,
+	    "touchMoveLimit": 60,
+	    "enableMarkLine": false,
+	    "dataLabel": true,
+	    "dataPointShape": true,
+	    "dataPointShapeType": "solid",
+	    "tapLegend": true,
+	    "title": {
+	        "name": "预计支出",
+	        "fontSize": 25,
+	        "color": "#ff0000",
+	        "offsetX": 0,
+	        "offsetY": 0
+	    },
+	    "extra": {
+	        "arcbar": {
+	            "type": "default",
+	            "width": 12,
+	            "backgroundColor": "#E9E9E9",
+	            "startAngle": 0.75,
+	            "endAngle": 0.25,
+	            "gap": 2,
+	            "centerX": 0,
+	            "centerY": 0,
+	            "linearType": "none",
+				
+	        }
+	    }
 	},
+	
 	"line":{
 		"type": "line",
     "color": color,
-		"padding": [15,10,0,15],
-		"xAxis": {
+	"padding": [15,0,0,0],
+	"dataLabel":false,
+	"enableScroll": true,
+	"xAxis": {
       "disableGrid": true,
+	  "fontSize":10,
+	  "itemCount": 15,
 		},
-		"yAxis": {
+	"yAxis": {
       "gridType": "dash",
       "dashLength": 2,
+	  "min":0,
 		},
-		"legend": {
+	"legend": {
 		},
 		"extra": {
 			"line": {
 				"type": "straight",
 				"width": 2
 			},
-		}
+		},
+		
 	},
+	
   "tline":{
   	"type": "line",
     "color": color,
@@ -282,6 +385,7 @@ const cfu = {
   		},
   	}
   },
+  
   "tarea":{
   	"type": "area",
     "color": color,

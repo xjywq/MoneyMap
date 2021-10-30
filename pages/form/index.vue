@@ -1,27 +1,119 @@
 <template>
-	<div class="container">
+	<view>
+		<!-- <div class="container"> -->
 		<div class="container DataContainer">
-			<div class="Consum">{{date}}</div>
-			<div class="Consum">日期</div>
+			<qiun-title-bar :title="'日期: ' + date" />
 		</div>
 		<div class="container ChartContainer">
-			<h1 class="title">我的账单</h1>
-			<!-- <text>本月支出</text>
-			<view id="main" class="graph">
-				<echarts :option="option" style="width: 100%; height: 100%" @click="echartsClick"></echarts>
-			</view> -->
-			<text>本月支出</text>
-			<view id="main" class="graph">
-				<echarts-el :option="option" style="width: 100%; height: 100%" @click="echartsClick"></echarts-el>
+			<qiun-title-bar title="统计时间" />
+			<view class="leave_cont">
+				<view class="ul">
+					<view class="li">
+						<text>开始时间</text>
+						<view class="flex1">
+							<picker mode="date" :end="(end_date == '无') ? date: end_date" @change="bindDateChange">
+								<view class="date" @longpress="start_date = '无'">{{start_date}}</view>
+							</picker>
+						</view>
+					</view>
+					<view class="li">
+						<text>结束时间</text>
+						<view class="flex1">
+							<picker mode="date" :start="(start_date == '无') ? '1970-01-01': start_date" :end="date"
+								@change="bindDateChange2">
+								<view class="date" @longpress="end_date = '无'">{{end_date}}</view>
+							</picker>
+						</view>
+					</view>
+				</view>
+			</view><br>
+
+			<qiun-title-bar title="收支总览" />
+
+			<uni-table border stripe emptyText="暂无更多数据">
+				<!-- 表头行 -->
+				<uni-tr>
+					<uni-th align="center" width=80%>支出</uni-th>
+					<uni-th align="center" width=80%>收入</uni-th>
+					<uni-th align="center" width=80%>结余</uni-th>
+				</uni-tr>
+				<!-- 表格数据行 -->
+				<uni-tr>
+					<uni-td align="center" v-for="(record, index) in outOpts['subtitle']"><text style="color: #FF0000;">￥{{record}}</text>
+					</uni-td>
+					<uni-td align="center" v-for="(record, index) in inOpts['subtitle']"><text>￥{{record}}</text>
+					</uni-td>
+					<uni-td align="center" v-for="(record, index) in subOpts['subtitle']">
+						<view v-if="record>=0"><text>￥{{record}}</text></view>
+						<view v-if="record<0"><text style="color: #FF0000;">￥{{record}}</text></view>
+					</uni-td>
+				</uni-tr>
+			</uni-table>
+			</script>
+
+			<qiun-title-bar title="收支折线图" />
+			<view class="line-box">
+				<qiun-data-charts type="line" :chartData="linedata" :ontouch="true" />
+			</view>
+
+			<qiun-title-bar title="支出情况" />
+			<view class="charts-box">
+				<qiun-data-charts type="rose" :opts="outOpts" :chartData="outData" />
+			</view>
+
+			<qiun-title-bar title="收入情况" />
+			<view class="charts-box" @longpress="inDetail">
+				<qiun-data-charts type="rose" :opts="inOpts" :chartData="inData" />
 			</view>
 			<button @click="updateClick">刷新</button>
 		</div>
-	</div>
+		<!-- </div> -->
+
+
+
+		<!-- syh -->
+		<view v-if="show_chart">
+			<qiun-title-bar title="支出情况表" />
+			<uni-table border stripe emptyText="无更多数据">
+				<!-- 表头行 -->
+				<uni-tr>
+					<uni-th align="center">分类</uni-th>
+					<uni-th align="center">金额</uni-th>
+				</uni-tr>
+				<!-- 表格数据行 -->
+				<uni-tr v-for="(record, index) in outData['series'][0]['data']">
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&outDetail()">{{record["name"]}}</span></uni-td>
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&outDetail()">￥{{record["value"]}}</span></uni-td>
+				</uni-tr>
+
+			</uni-table><br>
+		</view><br>
+
+		<view v-if="show_chart">
+			<qiun-title-bar title="收入情况表" />
+			<uni-table border stripe emptyText="无更多数据">
+				<!-- 表头行 -->
+				<uni-tr>
+					<uni-th align="center">分类</uni-th>
+					<uni-th align="center">金额</uni-th>
+				</uni-tr>
+				<!-- 表格数据行 -->
+				<uni-tr v-for="(record, index) in inData['series'][0]['data']">
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&inDetail()">{{record["name"]}}</span></uni-td>
+					<uni-td align="center"><span
+							@click="(category=record['name'])&&inDetail()">￥{{record["value"]}}</span></uni-td>
+				</uni-tr>
+
+			</uni-table><br>
+		</view>
+	</view>
 </template>
 
 <script>
-	import Echarts from '@/components/echarts/echarts.vue';
-	import EchartsEl from '@/components/echarts/echarts-el.vue';
+	import "@/common/basic_method.js";
 	import {
 		dateUtils
 	} from "@/common/util.js";
@@ -29,34 +121,68 @@
 	import {
 		generatesql,
 		openDB,
-		selectSQL,
+		createTable,
 		closeDB,
 		executeSql
 	} from "@/common/DB_method.js"
 
 	export default {
 		data() {
-			var get_date = dateUtils.format(new Date())
+			var date1 = new Date();
+			var startdate = new Date(date1);
+			var table_name = uni.getStorageSync('uni-id');
+			if (table_name == '') {
+				table_name = 'initial'
+			};
+			startdate.setDate(date1.getDate() - 7);
 			return {
-				date: get_date,
-				sql: 'select * from database',
+				start_date: startdate.format("YYYY-MM-DD"),
+				end_date: date1.format("YYYY-MM-DD"),
+				delta_date: 7,
+				outData: {},
+				outOpts: {},
+				inData: {},
+				inOpts: {},
+				subOpts: {},
+				linedata: {},
+				sql_data: [],
+				date: date1.format("YYYY-MM-DD"),
+				table_name: table_name,
 				option: {},
+				show_chart: true,
+				category: '',
 			};
 		},
-		components: {
-			Echarts,
-			EchartsEl
-		},
+
 		onLoad: function() {
+			createTable('moneymap', this.table_name);
 			this.reload();
 		},
+
+		onShow: function() {
+			var table_name = uni.getStorageSync('uni-id');
+			if (table_name == '') {
+				table_name = 'initial'
+			};
+			this.table_name = table_name
+			this.reload();
+		},
+
 		onPullDownRefresh: function(a) {
 			this.updateClick();
 		},
+
 		methods: {
-			echartsClick(params) {
-				console.log('点击数据', params)
+			bindDateChange: function(e) {
+				this.start_date = e.target.value;
+				this.reload();
+
 			},
+			bindDateChange2: function(e) {
+				this.end_date = e.target.value;
+				this.reload();
+			},
+
 			updateClick() {
 				this.reload();
 				uni.showToast({
@@ -64,142 +190,197 @@
 				});
 				uni.stopPullDownRefresh();
 			},
+
+			timeFrameChange(e) {
+				this.timeIndex = e.target.value;
+				this.reload();
+			},
+
+			dic2list(dic) {
+				var ret = new Array();
+				for (var key in dic) {
+					ret.push({
+						"name": key,
+						"value": dic[key]
+					});
+				}
+				return ret;
+			},
+
+			datelist: function() {
+				var l = [];
+				for (var i = 0; i < this.delta_date; i++) {
+					l.push(0);
+				}
+				return l;
+			},
+			datemlist: function() {
+				var l = [];
+				for (var i = 0; i < this.delta_date; i++) {
+					var getdate = new Date();
+					var newdate = new Date(getdate);
+					newdate.setDate(getdate.getDate() - this.delta_date + i)
+					if (i == 0 || (i + 1) % 15 == 0) {
+						l.push(newdate.format('MM-DD'));
+					} else l.push('');
+				}
+				return l;
+			},
+
+
+			updateChart() {
+				var sql_data = this.sql_data;
+				var outcount = 0,
+					incount = 0;
+				var outData = {},
+					inData = {};
+				var linedata = {};
+				var in_co = {},
+					out_co = {},
+					sub_co = {};
+				var l1 = this.datelist(),
+					l2 = this.datelist();
+				var sd = Date.parse(this.start_date);
+
+				sql_data.forEach(function(item) {
+					var ed = Date.parse(item["day"]);
+					var delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
+					//console.log(delta_date);
+					if (item["income"] == "true") {
+						incount += item["price"];
+						l1[delta_date - 1] += item["price"];
+						if (!inData.hasOwnProperty(item["tags"])) inData[item["tags"]] = item["price"];
+						else inData[item["tags"]] += item["price"];
+					} else {
+						outcount += item["price"];
+						l2[delta_date - 1] += item["price"];
+						if (!outData.hasOwnProperty(item["tags"])) outData[item["tags"]] = item["price"];
+						else outData[item["tags"]] += item["price"];
+					}
+				});
+				this.outOpts = {
+					legend: {
+						position: 'bottom'
+					},
+					extra: {
+						ring: {
+							ringWidth: 30,
+							linearType: 'custom',
+							centerColor: '#FFF'
+						}
+					},
+					title: {
+						name: "总支出"
+					},
+					subtitle: {
+						name: outcount
+					}
+				};
+				this.inOpts = {
+					legend: {
+						position: 'bottom'
+					},
+					extra: {
+						ring: {
+							ringWidth: 30,
+							linearType: 'custom',
+							centerColor: '#FFF'
+						}
+					},
+					title: {
+						name: "总收入"
+					},
+					subtitle: {
+						name: incount
+					}
+				};
+
+				this.subOpts = {
+					subtitle: {
+						name: incount - outcount
+					}
+				};
+				this.outData = {
+					"series": [{
+						"data": this.dic2list(outData)
+					}]
+				};
+				this.inData = {
+					"series": [{
+						"data": this.dic2list(inData)
+					}]
+				};
+				this.linedata = {
+					categories: this.datemlist(),
+					series: [{
+							name: "收入",
+							data: l1
+						},
+						{
+							name: "支出",
+							data: l2
+						}
+					]
+				};
+				this.show_chart = true;
+			},
+
 			reload() {
-				var a = this
-				var spl = a.sql
+				var sd = Date.parse(this.start_date);
+				var ed = Date.parse(this.end_date);
+				var t = this;
+				this.delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
+				this.category = '';
+				this.outData = {
+					"series": [{
+						"data": []
+					}]
+				};
+				this.inData = {
+					"series": [{
+						"data": []
+					}]
+				};
+				this.show_chart = false;
+
+				var sqlWhere = (this.start_date == '无') ? '' : ' WHERE day >= "' + this.start_date + '"';
+				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') + ' day <= "' + this.end_date + '"'
+				);
 				plus.sqlite.selectSql({
 					name: 'moneymap',
-					sql: a.sql,
+					sql: 'select * from ' + this.table_name + sqlWhere,
 					success: function(e) {
-						var tag_sum = {}
-						for (var index = 0; index < e.length; index++) {
-							var item = e[index];
-							if (item.tags in tag_sum) {
-								tag_sum[item.tags] += parseFloat(item.price);
-							} else {
-								tag_sum[item.tags] = parseFloat(item.price);
-							}
-						}
-						var tags = [];
-						var tag_data = [];
-						for (var index in tag_sum) {
-							tags.push(index);
-							tag_data.push({
-								'value': tag_sum[index],
-								'name': index,
-								'price': tag_sum[index]
-							})
-						}
-
-						var option = {
-							baseOption: {
-								// 调色盘颜色列表
-								// color:['#015196','#0084f1', '#6abaff','#d6d6d6'],
-								title: { // 标题组件，包含主标题和副标题。
-									show: true,
-									left: '48%', // 标题组件距离 图表组件走边的距离
-									bottom: '80%',
-									itemGap: 5,
-									text: '可用额度: ' + '2000',
-									textStyle: {
-										color: '#464646',
-										fontWeight: 'normal',
-										fontSize: 15,
-									}
-								},
-								notMerge: false, // 自定义变量：true代表不合并数据，比如从折线图变为柱形图则需设置为true；false或不写代表合并
-								tooltip: {
-									show: true,
-									trigger: 'item',
-									formatter: function(params) {
-										console.log(params);
-										//系列名称
-										var seriesName = params.seriesName;
-										//类目名称
-										var name = params.name;
-										//百分比
-										var percent = params.percent;
-										return seriesName + '<br/>类别：' + name + '<br/>' + '所占百分比例：' +
-											percent + '%';
-
-									},
-								},
-								legend: {
-									type: 'scroll',
-									left: '48%', //图列组件距离 图表组件走边的距离 (% or px)
-									top: '20%',
-									orient: 'vertical',
-									align: 'left',
-									itemGap: 13,
-									selectedMode: true,
-									itemWidth: 15,
-									itemHeight: 15,
-									height: 210, //图例组件的高度，设置指定高度确定显示图例出来的个数。
-									textStyle: {
-										fontWeight: 'bold',
-										fontSize: 12
-									},
-									scrollDataIndex: 0,
-									//默认选中，暂未实现
-									formatter: function(name) {
-										var arrays = option.baseOption.series[0].data;
-										for (var i = 0; i < arrays.length; i++) {
-											//名称
-											var type_name = arrays[i].name;
-											//人民币占比
-											var price = arrays[i].price;
-											if (type_name == name) {
-												return name + '\n' + price;
-												break;
-											}
-										}
-									},
-									data: tags
-								},
-								grid: {
-									left: '5%',
-									right: '8%',
-									bottom: '5%',
-									containLabel: true
-								},
-								series: [{
-									type: 'pie',
-									name: '图表详情',
-									center: ['25%', '40%'],
-									radius: ['23%', '50%'],
-									//图形上的文本标签
-									label: {
-										normal: {
-											/**
-											 * outside:饼图扇区外侧，通过视觉引导线连到相应的扇区。
-											 * inside:饼图扇区内部。
-											 * center:在饼图中心位置
-											 */
-											position: 'inside',
-											formatter: '{d}%',
-										},
-									},
-									data: tag_data
-								}]
-							}
-						};
-						a.option = option;
+						t.sql_data = e;
+						t.updateChart();
 						uni.stopPullDownRefresh();
 					},
 					fail: function(e) {
 						plus.nativeUI.alert('查询SQL语句失败: ' + JSON.stringify(e));
-						a.sql_data = [];
+						t.sql_data = [];
 						uni.stopPullDownRefresh();
 					}
 				});
-			}
+			},
+
+			outDetail() {
+				console.log("ont");
+				uni.navigateTo({
+					url: "detail?type=out&category=" + this.category + "&sql_data=" + JSON.stringify(this.sql_data)
+				});
+			},
+
+			inDetail() {
+				uni.navigateTo({
+					url: "detail?type=in&category=" + this.category + "&sql_data=" + JSON.stringify(this.sql_data)
+				});
+			},
 		}
 	};
 </script>
 
 <style>
 	.container {
-		background-color: #52e2f8;
+		background-color: #ffffff;
 		border-radius: 20rpx;
 		overflow: hidden;
 		margin-left: 50rpx;
@@ -212,5 +393,48 @@
 		height: 500rpx;
 		margin: unset;
 		padding: unset;
+	}
+
+	.leave_cont .ul {
+		padding-left: 40rpx;
+	}
+
+	.leave_cont .ul .li {
+		display: flex;
+		align-items: center;
+		border-bottom: 1px solid #aa00ff;
+	}
+
+	.leave_cont .ul .li text {
+		padding: 20rpx 0;
+		font-size: 24rpx;
+		font-family: '黑体';
+	}
+
+	.leave_cont .ul .li .flex1 {
+		flex: 1;
+		text-align: right;
+		padding-right: 25rpx;
+		color: #999999;
+		font-size: 22rpx;
+	}
+
+	.date {
+		height: 42rpx;
+	}
+
+	.charts-box {
+		width: 100%;
+		height: 300px;
+	}
+
+	.line-box {
+		width: 100%;
+		height: 200px;
+	}
+
+	.char-box {
+		width: 100%;
+		height: 200px;
 	}
 </style>
