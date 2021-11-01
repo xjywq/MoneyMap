@@ -6,15 +6,17 @@
 				<uni-table border stripe emptyText="无更多数据" >
 					<!-- 表头行 -->
 					<uni-tr>
-						<uni-th align="center" width="150">日期</uni-th>
-						<uni-th align="center">金额</uni-th>
-						<uni-th align="center" width="200">备注</uni-th>
+						<uni-th align="center" width="110">日期</uni-th>
+						<uni-th align="center" width="85">时间</uni-th>
+						<uni-th align="center" width="50">金额</uni-th>
+						<uni-th align="center">备注</uni-th>
 					</uni-tr>
 					<!-- 表格数据行 -->
-					<uni-tr v-for="record in item">
+					<uni-tr v-for="record in item.slice().reverse()">
 						<uni-td align="center">{{record["day"]}}</uni-td>
-						<uni-td>{{record["price"]}}</uni-td>
-						<uni-td>{{record["comment"]?record["comment"]:"无"}}</uni-td>
+						<uni-td align="center">{{record["time"]}}</uni-td>
+						<uni-td align="center">{{record["price"]}}</uni-td>
+						<uni-td align="center">{{record["comment"]?record["comment"]:"无"}}</uni-td>
 					</uni-tr>
 				
 				</uni-table><br>
@@ -50,7 +52,6 @@
 				this.detail_data[this.sql_data[i]["tags"]].push(this.sql_data[i]);
 			}
 			this.show_detail = true;
-			console.log(this.detail_data);
 		},
 		methods: {
 		

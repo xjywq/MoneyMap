@@ -48,7 +48,7 @@
 				password: '',
 				check: false,
 				password1: '',
-				avatar_path: uni.getStorageSync('avatar_path'),
+				avatar_path: uni.getStorageSync('avatar_path'+a.username),
 				hasUserInfo: uni.getStorageSync('hasUserInfo')
 			}
 		},
@@ -114,7 +114,7 @@
 						a.hasUserInfo = true
 						uni.setStorageSync('uni_id_token', a.username)
 						uni.setStorageSync('hasUserInfo',true)
-						uni.setStorageSync('avatar_path','')
+						uni.setStorageSync('avatar_path'+a.username,'')
 						console.log(res)}
 						else
 						uni.showModal({
@@ -156,7 +156,7 @@
 						a.hasUserInfo = true
 						uni.setStorageSync('uni_id_token', a.username)
 						uni.setStorageSync('hasUserInfo',true)
-						uni.setStorageSync('avatar_path','')}
+						a.avatar_path=uni.getStorageSync('avatar_path'+a.username)
 						else
 						uni.showModal({
 							showCancel: false,
@@ -245,7 +245,6 @@
 				a.username='';
 				a.hasUserInfo=false;
 				a.avatar_path='';
-				uni.setStorageSync('avatar_path','');
 				uni.setStorageSync('uni_id_token','');
 				uni.setStorageSync('hasUserInfo',false);
 			},
@@ -269,7 +268,7 @@
 						      }
 						    });
 							
-							uni.setStorageSync('avatar_path',a.avatar_path)
+							uni.setStorageSync('avatar_path'+a.username,a.avatar_path)
 						uniCloud.callFunction({
 							name: 'uni-id-test',
 							data: {

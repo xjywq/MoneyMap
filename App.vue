@@ -6,14 +6,14 @@
 	
 	export default {
 		onLaunch: function() {
+			openDB('moneymap');
 			console.log('App Launch')
 		},
 		onShow: function() {
-			openDB();
 			console.log('App Show')
 		},
 		onHide: function() {
-			closeDB();
+			// closeDB();
 			console.log('App Hide')
 		}
 	}
@@ -23,6 +23,11 @@
 	/*每个页面公共css */
 	/* uni.css - 通用组件、模板样式库，可以当作一套ui库应用 */
 	@import 'common/uni.css';
+	
+	page{
+		background-color:#EFEFFF;
+		font-family: SIMYOU;
+	}
 	
 	.container {
 		padding-top: 50rpx;
