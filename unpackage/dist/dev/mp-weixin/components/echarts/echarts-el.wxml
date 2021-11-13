@@ -1,0 +1,1 @@
+<view class="data-v-b75f70ec"><view class="echarts data-v-b75f70ec" prop="{{option}}" change:prop="{{echarts.delay}}"></view></view>

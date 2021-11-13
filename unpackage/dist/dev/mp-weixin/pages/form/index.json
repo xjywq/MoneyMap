@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "报表",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "echarts": "/components/echarts/echarts",
+    "echarts-el": "/components/echarts/echarts-el"
+  }
+}
