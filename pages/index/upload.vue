@@ -35,9 +35,9 @@
 							<view class="title">备注</view>
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
-						<view class="uni-btn-v">
-							<button form-type="submit">确认</button>
-							<button type="default" @click="formReset">返回</button>
+						<view class="uni-btn-v" >
+							<el-button type="success" class="elbtn" form-type="submit" style="font-size: 30rpx;">确认</el-button>
+							<el-button type="info" class="elbtn" @click="formReset" style="font-size: 30rpx;">返回</el-button>
 						</view>
 					</form>
 				</view>
@@ -76,8 +76,8 @@
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v">
-							<button form-type="submit">确认</button>
-							<button type="default" @click="formReset">返回</button>
+							<el-button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</el-button>
+							<el-button class="elbtn" type="info" @click="formReset" style="font-size: 30rpx;">返回</el-button>
 						</view>
 					</form>
 				</view>
@@ -209,5 +209,16 @@
 	
 	.swiper {
 		height: 2000rpx;
+	}
+	
+	.elbtn {
+		width: 300rpx;
+		height: 60rpx;
+		line-height: 45rpx;
+		font-size: 30rpx;
+	}
+	
+	.uni-btn-v {
+		text-align: center;
 	}
 </style>
