@@ -68,3 +68,28 @@ module.exports = {
 	formatLocation: formatLocation,
 	dateUtils: dateUtils
 }
+
+
+// function set_storage_out(KEY,DATA) {	//KEY为username，DATA为选择的分类
+// 	try {
+// 		uni.setStorageSync('storage_key', 'hello');
+// 		console.log('storage_key', 'hello');
+// 	} catch (e) {
+// 		console.log('error: set_storage_out');
+// 	}
+// },
+// function set_storage_in(KEY,DATA) {
+// 	try {
+// 		uni.setStorageSync('storage_key', 'hello');
+// 		console.log('storage_key', 'hello');
+// 	} catch (e) {
+// 		console.log('error: set_storage_out');
+// 	}
+// },
+			
+// function get_storage_out(KEY) {
+// 	console.log('get_out ', KEY);
+// },
+// function get_storage_in(KEY) {
+// 	console.log('get_in ', KEY);
+// },

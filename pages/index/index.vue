@@ -5,22 +5,27 @@
 			<view class="char-box">
 				<qiun-data-charts type="arcbar" :chartData="cdata" background="none" />
 			</view>
-			<button class="jump" @tap="navigateTo">上传</button>
-			<button class="jump" @tap="updateClick">刷新</button>
+			<view style="text-align: center;">
+			<el-button type="primary" class="jump" @tap="navigateTo" icon="el-icon-upload" style="font-size: 30rpx;">上传</el-button>
+			<el-button type="primary" class="jump" @tap="updateClick" icon="el-icon-search" style="font-size: 30rpx;">刷新</el-button><br><br>
+			</view>
 			<qiun-title-bar title="支出" />
+			
 			<uni-table border stripe emptyText="无更多支出数据">
-				<uni-tr v-for="record in sql_data" v-if="record.income=='false'">
+				<uni-tr v-for="record in sql_data.slice().reverse()" v-if="record.income==0">
 					<uni-td>{{record["tags"]}}</uni-td>
 					<uni-td>{{record["day"]}}</uni-td>
+					<uni-td>{{record["time"]}}</uni-td>
 					<uni-td>{{record["price"]}}</uni-td>
-					<uni-td>{{record["comment"]?record["comment"]:"无"}}</uni-td>
+					<uni-td>{{record["comment"]?record["comment"]:"无" | numfilter(5)}}</uni-td>
 				</uni-tr>
 			</uni-table><br>
 			<qiun-title-bar title="收入" />
 			<uni-table border stripe emptyText="无更多收入数据">
-				<uni-tr v-for="record in sql_data" v-if="record.income=='true'">
+				<uni-tr v-for="record in sql_data.slice().reverse()" v-if="record.income==1">
 					<uni-td>{{record["tags"]}}</uni-td>
 					<uni-td>{{record["day"]}}</uni-td>
+					<uni-td>{{record["time"]}}</uni-td>
 					<uni-td>{{record["price"]}}</uni-td>
 					<uni-td>{{record["comment"]?record["comment"]:"无"}}</uni-td>
 				</uni-tr>
@@ -34,25 +39,33 @@
 </template>
 
 <script>
-	import "../../common/basic_method.js";
+	import "@/common/basic_method.js";
 	import {
 		openDB,
 		createTable,
 		droptable,
 		closeDB,
 		moveTable,
-	} from "../../common/DB_method.js"
+	} from "@/common/DB_method.js";
+	import {
+		dateUtils
+	} from "@/common/util.js";
 	export default {
 		data() {
 			var table_name = uni.getStorageSync('uni-id');
 			if (table_name == '') {
 				table_name = 'initial'
 			};
+			var edate = new Date();
+			edate.setDate(1);
 			return {
 				db: 'moneymap',
 				table_name: table_name,
 				sql_data: [],
 				cdata: {},
+				cOpts: {},
+				edate: edate.format("YYYY-MM-DD"),
+				expect: 2000
 			};
 		},
 		onLoad: function() {
@@ -65,17 +78,16 @@
 			if (table_name == '') {
 				table_name = 'initial'
 			};
-			this.table_name = table_name
+			this.table_name = table_name;
+			var edate = new Date();
+			edate.setDate(1);
+			this.edate = edate.format("YYYY-MM-DD");
 			this.reload();
 		},
 		onPullDownRefresh: function(a) {
 			this.updateClick();
 		},
 		methods: {
-			timeFrameChange(e) {
-			console.log("show");
-				this.reload();
-			},
 			OpenDB() {
 				openDB(this.db);
 			},
@@ -108,41 +120,32 @@
 					title: '刷新成功',
 				});
 			},
-
-			dic2list(dic) {
-				var ret = new Array();
-				for (var key in dic) {
-					ret.push({
-						"name": key,
-						"value": dic[key]
-					});
-				}
-				return ret;
-			},
 			reload() {
 				var a = this;
-				var date = new Date();
 				plus.sqlite.selectSql({
 					name: 'moneymap',
-					sql: 'select * from ' + a.table_name,
+					sql: 'select * from ' + a.table_name + ' WHERE day >= "' + a.edate + '"',
 					success: function(e) {
 						a.sql_data = e;
 						var sum = 0;
 						e.forEach(function(item) {
-							if (item["income"] == "true") {
-								sum += item["price"];
+							if (item["income"] == 1) {
+								sum = sum + item["price"];
 							} else {
-								sum -= item["price"];
+								sum = sum - item["price"];
 							}
 						});
 						if (sum > 0) {
 							sum = 0;
 						}
+						var ratio = -sum / a.expect;
+						if (ratio > 1) {
+							ratio = 1;
+						}
 						a.cdata = {
 							"series": [{
-								"data": -sum / 2000,
-								"color": "#ff0202"
-							}]
+								"data": ratio,
+							}],
 						};
 						uni.stopPullDownRefresh();
 					},
@@ -172,10 +175,12 @@
 		width: 100%;
 		height: 50px;
 	}
-
-	.whatever-some-font {
-		font-family: "STKaiti";
-		font-size: 35rpx;
-		font-style: italic;
+	
+	.jump{
+		width: 300rpx;
+		height: 60rpx;
+		line-height: 45rpx;
+		font-size: 30rpx;
 	}
+	
 </style>

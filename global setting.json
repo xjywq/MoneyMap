@@ -9,13 +9,16 @@
 				"checked": "true"
 			},
 			{
-				"value": "娱乐"
+				"value": "娱乐",
+				"checked": "true"
 			},
 			{
-				"value": "生活"
+				"value": "生活",
+				"checked": "true"
 			},
 			{
-				"value": "学习"
+				"value": "学习",
+				"checked": "true"
 			},
 			{
 				"value": "交通"
