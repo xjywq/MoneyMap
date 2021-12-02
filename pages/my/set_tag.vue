@@ -3,19 +3,6 @@
 		<page-head :title="title"></page-head>
 		<view class="uni-common-mt">
 			
-			
-			<!-- <view class="uni-form-item uni-column">
-				<view class="title">支出</view>
-				<checkbox-group class="uni-list" @change="checkboxChange_out">
-					<label class="uni-list-cell uni-list-cell-pd" v-for="item in radioItems" :key="item.value">
-						<view>
-							<checkbox :value="item.value" :checked="item.checked"></checkbox>	
-						</view>
-						<view>{{item.value}}</view>
-					</label>
-				</checkbox-group>
-			</view> -->
-			
 			<view class="uni-form-item uni-column">
 				<view class="title">支出</view>
 				<checkbox-group class="uni-list" @change="checkboxChange_out">
@@ -23,14 +10,14 @@
 						<view>
 							<checkbox :value="item" :checked="true"></checkbox>	
 						</view>
-						<view>{{item}}</view>
+						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 					
 					<label class="uni-list-cell uni-list-cell-pd" v-for="item in not_mark_out" :key="item">
 						<view>
 							<checkbox :value="item" :checked="false"></checkbox>	
 						</view>
-						<view>{{item}}</view>
+						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 				</checkbox-group>
 			</view>
@@ -38,51 +25,29 @@
 			<view class="uni-form-item uni-column">
 				<view class="title">收入</view>
 				<checkbox-group class="uni-list" @change="checkboxChange_in">
-					<label class="uni-list-cell uni-list-cell-pd" v-for="item in radioItems" :key="item.value"> 
+					<label class="uni-list-cell uni-list-cell-pd" v-for="item in select_in" :key="item">
 						<view>
-							<checkbox :value="item.value" :checked="item.checked"></checkbox>	
+							<checkbox :value="item" :checked="true"></checkbox>	
 						</view>
-						<view>{{item.value}}</view>
+						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
+					</label>
+					
+					<label class="uni-list-cell uni-list-cell-pd" v-for="item in not_mark_in" :key="item">
+						<view>
+							<checkbox :value="item" :checked="false"></checkbox>	
+						</view>
+						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 				</checkbox-group>
 			</view>
-
-			<!-- <view class="uni-form-item uni-column">
-				<view class="title">label用for标识表单组件</view>
-				<radio-group class="uni-list" @change="radioChange">
-					<view class="uni-list-cell uni-list-cell-pd" v-for="(item,index) in radioItems" :key="index">
-						<view>
-							<radio :id="item.name" :value="item.name" :checked="item.checked"></radio>
-						</view>
-                        <label class="label-2-text" :for="item.name">
-                            <text>{{item.value}}</text>
-                        </label>
-					</view>
-				</radio-group>
-			</view> -->
-
-			<!-- <view class="uni-form-item uni-column">
-				<view class="title">label内有多个时选中第一个</view>
-				<checkbox-group class="uni-list" @change="checkboxChange">
-					<label class="label-3">
-						<view class="uni-list-cell uni-list-cell-pd">
-							<checkbox class="checkbox-3">选项一</checkbox>
-						</view>
-						<view class="uni-list-cell uni-list-cell-pd">
-							<checkbox class="checkbox-3">选项二</checkbox>
-						</view>
-						<view class="uni-link uni-center" style="margin-top:20rpx;">点击该label下的文字默认选中第一个checkbox</view>
-					</label>
-				</checkbox-group>
-			</view> -->
+			
 
 		</view>
 	</view>
 </template>
 <script>
 	// import {
-	// 	set_storage_out,
-	// 	set_storage_in,
+	// 	get_user,
 	// 	get_storage_out,
 	// 	get_storage_in,
 	// } from "@/common/util.js";
@@ -92,112 +57,125 @@
 			// console.log(global_setting)
 			return {
 				title: 'label',
-				checkboxItems: [{
-						name: 'USA',
-						value: '美国',
-						checked: 'false'	//初始是否勾选
-					},
-					{
-						name: 'CHN',
-						value: '中国',
-						checked: 'false'
-					}
-				],
-				radioItems: global_setting['UploadSetting']['Tags'],
+				
+				radioItems_out: global_setting['UploadSetting']['Out'],
+				user_name_out: '',
 				select_out: [],
 				not_mark_out: [],
 				
-				// radioItems: [{
-				// 		name: 'USA',
-				// 		value: '美国'
-				// 	},
-				// 	{
-				// 		name: 'CHN',
-				// 		value: '中国',
-				// 		checked: 'true'
-				// 	}
-				// ],
-				// hidden: false
+				radioItems_in: global_setting['UploadSetting']['In'],
+				user_name_in: '',
+				select_in: [],
+				not_mark_in: [],
+				
+				img_src: global_setting['UploadSetting']['img_src'],
 			}
 		},
 		onShow: function() {	//获得缓存中对应的标签
-			console.log('更改分类页面');
-			
+			var user_id = '';
 			try {	//获取支出
-			    this.select_out = uni.getStorageSync('xiaoming');
-			    if (this.select_out) {
-			        console.log('select_out',this.select_out);
+			    user_id = uni.getStorageSync('uni-id');
+			    if (user_id) {
+			        // console.log('log in and get id',user_id);
 			    } else {
-					console.log('nothing in '+'xiaoming')
+					user_id = 'xiaoming';
+					// console.log('not log in');
 				}
 			} catch (e) {
-			    console.log('error: get_storage_out');
+			    console.log('error: get_user');
 			}
-			this.not_mark_out = [];
-			for(var k in this.radioItems){
-				if (this.select_out.indexOf(this.radioItems[k]["value"]) == -1){
-					
-					this.not_mark_out.push(this.radioItems[k]["value"]);
-				}
-			}
-			console.log('not_mark_out',this.not_mark_out);
+			this.get_user(user_id);	//根据用户名获得缓存
+			this.get_storage_out();
+			this.get_storage_in();
 		},
 		methods: {
 			checkboxChange_out: function(e) {
-				var checked = e.detail.value;
-				this.select_out = checked;
-				console.log('this.select_out', this.select_out);
+				this.select_out = e.detail.value;
+				// console.log('this.select_out', this.select_out);
 				
 				try {
-				    uni.setStorageSync('xiaoming', this.select_out);
-					console.log('set to xiaoming');
+				    uni.setStorageSync(this.user_name_out, this.select_out);
+					// console.log('set to '+this.user_name_out);
 				} catch (e) {
 				    console.log('error: set_storage_out');
 				}
 				
 				this.not_mark_out = [];
-				for(var k in this.radioItems){
-					if (this.select_out.indexOf(this.radioItems[k]["value"]) == -1){
+				for(var k in this.radioItems_out){
+					if (this.select_out.indexOf(this.radioItems_out[k]["value"]) == -1){
 						
-						this.not_mark_out.push(this.radioItems[k]["value"]);
+						this.not_mark_out.push(this.radioItems_out[k]["value"]);
 					}
 				}
-				console.log('not_mark_out',this.not_mark_out);
-				
+				// console.log('not_mark_out',this.not_mark_out);
 			},
 			checkboxChange_in: function(e) {
-				var checked = e.detail.value;
-				console.log('收入分类：', checked)
+				this.select_in = e.detail.value;
+				// console.log('this.select_in', this.select_in);
+				
+				try {
+				    uni.setStorageSync(this.user_name_in, this.select_in);
+					// console.log('set to '+this.user_name_in);
+				} catch (e) {
+				    console.log('error: set_storage_in');
+				}
+				
+				this.not_mark_in = [];
+				for(var k in this.radioItems_in){
+					if (this.select_in.indexOf(this.radioItems_in[k]["value"]) == -1){
+						
+						this.not_mark_in.push(this.radioItems_in[k]["value"]);
+					}
+				}
+				// console.log('not_mark_in',this.not_mark_in);
 
 			},
-			
-			set_storage_out: function(KEY,DATA) {	//KEY为username，DATA为选择的分类
-				try {
-				    uni.setStorageSync('storage_key', 'hello');
-					console.log('storage_key', 'hello');
-				} catch (e) {
-				    console.log('error: set_storage_out');
-				}
-			},
-			set_storage_in: function(KEY,DATA) {
-				try {
-				    uni.setStorageSync('storage_key', 'hello');
-					console.log('storage_key', 'hello');
-				} catch (e) {
-				    console.log('error: set_storage_out');
-				}
+			get_user: function(user_name) {
+				this.user_name_in = user_name+"_in";
+				// console.log(user_name+"_in")
+				this.user_name_out = user_name+"_out";
+				// console.log(user_name+"_out")
 			},
 			
-			get_storage_out: function(KEY) {
-				console.log('get_out ', KEY);
+			get_storage_out: function() {
+				try {	//获取支出
+				    this.select_out = uni.getStorageSync(this.user_name_out);
+				    if (this.select_out) {
+				        // console.log('select_out',this.select_out);
+				    } else {
+						// console.log('nothing in '+this.user_name_out)
+					}
+				} catch (e) {
+				    console.log('error: get_storage_out');
+				}
+				this.not_mark_out = [];
+				for(var k in this.radioItems_out){
+					if (this.select_out.indexOf(this.radioItems_out[k]["value"]) == -1){
+						this.not_mark_out.push(this.radioItems_out[k]["value"]);
+					}
+				}
+				// console.log('not_mark_out',this.not_mark_out);
 			},
-			get_storage_in: function(KEY) {
-				console.log('get_in ', KEY);
+			get_storage_in: function() {
+				try {	//获取收入
+				    this.select_in = uni.getStorageSync(this.user_name_in);
+				    if (this.select_in) {
+				        // console.log('select_in',this.select_in);
+				    } else {
+						// console.log('nothing in '+this.user_name_in)
+					}
+				} catch (e) {
+				    console.log('error: get_storage_in');
+				}
+				this.not_mark_in = [];
+				for(var k in this.radioItems_in){
+					if (this.select_in.indexOf(this.radioItems_in[k]["value"]) == -1){
+						
+						this.not_mark_in.push(this.radioItems_in[k]["value"]);
+					}
+				}
+				// console.log('not_mark_in',this.not_mark_in);
 			},
-			// radioChange: function(e) {
-			// 	var checked = e.detail.value
-			// 	console.log(checked)
-			// }
 		}
 	}
 </script>
