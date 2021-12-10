@@ -1,0 +1,19 @@
+{
+    "id": "lxm-popupmenu-list",
+    "name": "首页框架模板：顶部logo上部自定义导航连带气泡菜单导航底部导航。",
+    "version": "1.0.0",
+    "description": " lxm-popupmenu-list 是uniapp项目通用前端页面框架之一，顶部logo+自定义上部导航+气泡菜单+搜索页面+图文列表到详情页面切换+底部导航+下拉刷新+上拉加载更多。",
+    "keywords": [
+        "顶部自定义logo",
+        "气泡菜单导航",
+        "上部自定义导航栏",
+        "底部导航",
+        "搜索页面"
+    ],
+    "dcloudext": {
+        "category": [
+            "uni-app前端模板",
+            "前端页面模板"
+        ]
+    }
+}

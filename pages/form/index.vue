@@ -66,8 +66,15 @@
 				<qiun-data-charts type="rose" :opts="inOpts" :chartData="inData" />
 			</view>
 			<button @click="updateClick">刷新</button>
+			
+		
 		</div>
 		<!-- </div> -->
+		
+				<PengpaiFadeInOut @click="hideorshow"
+				:left="10" 
+				:radius="100"
+				:contents="tips"/>
 
 
 
@@ -113,6 +120,7 @@
 </template>
 
 <script>
+	import PengpaiFadeInOut from "@/components/Pengpai-FadeInOut/Pengpai-FadeInOut.vue";
 	import "@/common/basic_method.js";
 	import {
 		dateUtils
@@ -127,6 +135,7 @@
 	} from "@/common/DB_method.js"
 
 	export default {
+		components:{PengpaiFadeInOut},
 		data() {
 			var date1 = new Date();
 			var startdate = new Date(date1);
@@ -151,9 +160,16 @@
 				option: {},
 				show_chart: true,
 				category: '',
+				Engel:0,
+				ratio:0,
+				maxtag:'',
+				maxitem:'',
+				maxday:'',
+				meancost:0,
+				maxdayratio:0,
+				tips:[]
 			};
 		},
-
 		onLoad: function() {
 			createTable('moneymap', this.table_name);
 			this.reload();
@@ -242,7 +258,15 @@
 				var l1 = this.datelist(),
 					l2 = this.datelist();
 				var sd = Date.parse(this.start_date);
-
+				var daycost = {};
+				var eat = 0;
+				var total = 0;
+				var maxtag = "";
+				var maxitem = "";
+				var weekDay = ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];  
+				var myDate = "";
+				var Date1 = "";
+				var maxprice = 0;
 				sql_data.forEach(function(item) {
 					var ed = Date.parse(item["day"]);
 					var delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
@@ -255,10 +279,37 @@
 					} else {
 						outcount += item["price"];
 						l2[delta_date - 1] += item["price"];
+						if (item["tags"]=="餐饮")eat+=item["price"];
 						if (!outData.hasOwnProperty(item["tags"])) outData[item["tags"]] = item["price"];
 						else outData[item["tags"]] += item["price"];
+						total+=item["price"];
+						if (maxitem=="")maxitem=item["tags"];
+						if (item["price"]>maxprice){maxitem=item["tags"];maxprice=item["price"];}
+						if (maxtag=="")maxtag=item["tags"];
+						if (outData[item["tags"]]>outData[maxtag])maxtag=item["tags"];
+						myDate = new Date(Date.parse(item["day"]));  
+						Date1 = weekDay[myDate.getDay()];
+						if (!daycost.hasOwnProperty(Date1)) daycost[Date1] = item["price"];
+						else daycost[Date1] += item["price"];
 					}
 				});
+				var maxday="";
+				 for(var i=0;i<7;i++){
+					 if (daycost.hasOwnProperty(weekDay[i]))
+				      {if (maxday=="")maxday=weekDay[i];
+						  if(daycost[weekDay[i]]>daycost[maxday])maxday=weekDay[i];}}
+				this.maxday=maxday;
+				this.maxitem=maxitem;
+				this.maxtag=maxtag;
+				this.ratio=total/2000;
+				this.ratio=this.ratio.toFixed(2);
+				if (total==0)
+					{this.Engel=0;this.maxdayratio=0;}
+				else
+					{this.Engel=eat/total;
+					this.Engel=this.Engel.toFixed(2);
+					this.maxdayratio=daycost[maxday]*100/(total/7);
+					this.maxdayratio=this.maxdayratio.toFixed(2);}
 				this.outOpts = {
 					legend: {
 						position: 'bottom'
@@ -324,6 +375,19 @@
 					]
 				};
 				this.show_chart = true;
+				this.tips.push("您本月收入与预算比为"+this.ratio);
+				this.tips.push("您本月恩格尔系数为"+this.Engel);
+				this.tips.push('本月最多的开销种类为"'+this.maxtag+'"');
+				if (this.Engel<0.4&&this.Engel>0)
+					this.tips.push("悄悄告诉你，恩格尔系数较低，可以考虑适当进行理财哦~");
+				if (this.ratio<0.3) 
+					this.tips.push("这个月预算还很充足！^_^");
+				if (this.ratio>=0.3&&this.ratio<0.7)
+					this.tips.push("用度适中，加油干哦~");
+				if (this.ratio>=0.7)
+					this.tips.push("预算紧张，要精打细算啦！");	
+				this.tips.push('本月最大单笔开销种类为"'+this.maxitem+'"');
+				this.tips.push("我们发现，您在"+this.maxday+"的平均开销最大，高于平均值"+this.maxdayratio);
 			},
 
 			reload() {

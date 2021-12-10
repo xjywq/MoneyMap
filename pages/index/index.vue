@@ -2,9 +2,6 @@
 	<view>
 		<view class="uni-padding-wrap uni-common-mt">
 			<qiun-title-bar title="预计支出" />
-			<view v-if="s<0.3" style="color: #304c4f" >这个月预算还很充足！^_^</view>
-			<view v-if="s>=0.3&&s<0.7" style="color: #304c4f;">用度适中,加油干哦~</view>
-			<view v-if="s>=0.7" style="color: #304c4f;">预算紧张,要精打细算啦!</view>
 			<view class="char-box">
 				<qiun-data-charts type="arcbar" :chartData="cdata" background="none" />
 			</view>
