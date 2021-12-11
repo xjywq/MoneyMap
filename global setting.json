@@ -5,20 +5,16 @@
 	},
 	"UploadSetting": {
 		"Out": [{
-				"value": "餐饮",
-				"checked": "true"
+				"value": "餐饮"
 			},
 			{
-				"value": "购物",
-				"checked": "true"
+				"value": "购物"
 			},
 			{
-				"value": "日用",
-				"checked": "true"
+				"value": "日用"
 			},
 			{
-				"value": "交通",
-				"checked": "true"
+				"value": "交通"
 			},
 			{
 				"value": "水果"

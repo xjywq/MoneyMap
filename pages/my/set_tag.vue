@@ -111,7 +111,7 @@
 			},
 			checkboxChange_in: function(e) {
 				this.select_in = e.detail.value;
-				// console.log('this.select_in', this.select_in);
+				console.log('this.select_in', this.select_in);
 				
 				try {
 				    uni.setStorageSync(this.user_name_in, this.select_in);

@@ -17,7 +17,7 @@
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_out">
 									<view>
-										<radio id="item.value" :value="item" :checked="true"></radio>
+										<radio id="item.value" :value="item" :checked="false"></radio>
 										<image class="category" mode="widthFix" :src="img_src[item]" />
 									</view>
 									<label class="label-2-text">
@@ -58,7 +58,7 @@
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_in">
 									<view>
-										<radio id="item.value" :value="item" :checked="true"></radio>
+										<radio id="item.value" :value="item" :checked="false"></radio>
 										<image class="category" mode="widthFix" :src="img_src[item]" />
 									</view>
 									<label class="label-2-text">
