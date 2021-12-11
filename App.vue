@@ -30,6 +30,11 @@
 		font-family: SIMYOU;
 	}
 	
+	page{
+		background-color:#EFEFFF;
+		font-family: SIMYOU;
+	}
+	
 	.container {
 		padding-top: 50rpx;
 		padding: 20rpx;

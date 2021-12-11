@@ -1,0 +1,215 @@
+<template>
+	<view>
+		<view
+			ref="ani"
+			:animation="animationData"
+			class="message"
+			:style="{ top: top + 'px', left: left + 'px' }"
+		>
+			<view class="round bg-gradual-orange flex justify-start shadow" style="padding: 3px;">
+				<view @click="aa" class="cu-avatar cu-a-sm round" :style="{ backgroundImage: `url(${img})` }">
+					<!-- #ifdef APP-NVUE -->
+					<image :src="img" class="avatarimg"></image>
+					<!-- #endif -->
+				</view>
+				<view v-if="show" class="padding-lr-sm flex align-center">
+					<text class="text-sm">{{ txt }}</text>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+// #ifdef APP-NVUE
+const animation = uni.requireNativePlugin('animation');
+// #endif
+export default {
+	name: 'Pengpai-FadeInOut',
+	props: {
+		//持续时间
+		duration: {
+			type: Number,
+			default: 2600
+		},
+		//停留时间
+		wait: {
+			type: Number,
+			default: 300000000
+		},
+		//顶部距离px
+		top: {
+			type: Number,
+			default: 350
+		},
+		//左边距离px
+		left: {
+			type: Number,
+			default: 10
+		},
+		//动画半径
+		radius: {
+			type: Number,
+			default: 30
+		},
+		//数据
+		contents: {
+			type: Array,
+			default: () => {
+				return []
+			}
+		}
+	},
+	data() {
+		return {
+			animationData: {},
+			animationNumber:{},
+			show: true,
+			tips: ['1','2'],
+			txt: '',
+			i: 0,
+ 			img: 'https://mrmad.com.tw/wp-content/uploads/2018/05/HomeHijack-siri.png'
+		};
+	},
+	mounted(){
+		this.donghua();
+	},
+	watch:{
+		
+	},
+	methods: {
+		aa:function(){
+			if (this.show)
+				this.show=false;
+			else{
+				this.i=(this.i+1)%this.tips.length;
+				this.txt=this.tips[this.i];
+				this.show=true;
+			}
+		},
+		donghua() {
+			this.tips=this.contents;
+			this.txt=this.tips[0];
+			this.i=0;
+			//进入
+			// #ifndef APP-NVUE
+			this.animationData = uni
+				.createAnimation({
+					duration: this.duration / 2,
+					timingFunction: 'ease'
+				})
+				.top(this.top - this.radius)
+				.opacity(0.8)
+				.step()
+				.export();
+			// #endif
+
+			// #ifdef APP-NVUE
+			if (!this.$refs['ani']) return;
+			animation.transition(
+				this.$refs['ani'].ref,
+				{
+					styles: {
+						transform: `translateY(-${this.radius/2}px)`,
+						opacity: 1
+					},
+					duration: this.duration/2,
+					timingFunction: 'linear',
+					needLayout: false,
+					delay: 0
+				}
+			);
+			// #endif
+
+		}
+	}
+};
+</script>
+
+<style scoped>
+.message {
+	position: fixed;
+	z-index: 99999;
+	opacity: 0;
+}
+.round {
+	border-radius: 5000px;
+}
+.bg-gradual-orange {
+	/* #ifndef APP-NVUE */
+	background-image: linear-gradient(45deg, #ff9700, #ed1c24);
+	/* #endif */
+	/* #ifdef APP-NVUE */
+	background-image: linear-gradient(to bottom right, #ff9700, #ed1c24);
+	/* #endif */
+	color: #ffffff;
+}
+.shadow {
+	box-shadow: 4px 4px 5px rgba(217, 109, 26, 0.2);
+}
+.flex {
+	/* #ifndef APP-NVUE */
+	display: flex;
+	/* #endif */
+	flex-direction: row;
+}
+.justify-start {
+	justify-content: flex-start;
+}
+.cu-avatar {
+	/* #ifndef APP-NVUE */
+	font-variant: small-caps;
+	display: inline-flex;
+	white-space: nowrap;
+	background-size: cover;
+	background-position: center;
+	vertical-align: middle;
+	/* #endif */
+	margin: 0;
+	padding: 0;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	background-color: #ccc;
+	color: #ffffff;
+	position: relative;
+	width: 30px;
+	height: 30px;
+	font-size: 1.5em;
+}
+
+/* #ifdef APP-NVUE */
+.avatarimg {
+	width: 30px;
+	height: 30px;
+	border-radius: 50px;
+}
+/* #endif */
+
+.cu-a-sm {
+	width: 30px;
+	height: 30px;
+	font-size: 1em;
+}
+.padding-lr-sm {
+	padding-left: 20upx;
+	padding-right: 20upx;
+}
+.align-center {
+	align-items: center;
+}
+.margin-left-xs {
+	margin-left: 10upx;
+}
+.text-bold {
+	font-weight: bold;
+}
+.margin-lr-sm {
+	margin-left: 20upx;
+	margin-right: 20upx;
+}
+.text-sm {
+	font-size: 15px;
+	color: #ffffff;
+}
+</style>
