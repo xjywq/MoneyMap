@@ -15,12 +15,13 @@
 						<view class="uni-form-item uni-column">
 							<view class="title">标签</view>
 							<radio-group name="tag">
-								<view class="uni-list-cell" v-for="(item, index) in radioItems">
+								<view class="uni-list-cell" v-for="item in select_out">
 									<view>
-										<radio id="item.value" :value=item.value :checked="item.checked"></radio>
+										<radio id="item.value" :value="item" :checked="true"></radio>
+										<image class="category" mode="widthFix" :src="img_src[item]" />
 									</view>
 									<label class="label-2-text">
-										<text>{{item.value}}</text>
+										<text>{{item}}</text>
 									</label>
 								</view>
 							</radio-group>
@@ -55,12 +56,13 @@
 						<view class="uni-form-item uni-column">
 							<view class="title">标签</view>
 							<radio-group name="tag">
-								<view class="uni-list-cell" v-for="(item, index) in radioItems">
+								<view class="uni-list-cell" v-for="item in select_in">
 									<view>
-										<radio id="item.value" :value=item.value :checked="item.checked"></radio>
+										<radio id="item.value" :value="item" :checked="true"></radio>
+										<image class="category" mode="widthFix" :src="img_src[item]" />
 									</view>
 									<label class="label-2-text">
-										<text>{{item.value}}</text>
+										<text>{{item}}</text>
 									</label>
 								</view>
 							</radio-group>
@@ -77,7 +79,7 @@
 						</view>
 						<view class="uni-btn-v">
 							<el-button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</el-button>
-							<el-button class="elbtn" type="info" @click="formReset" style="font-size: 30rpx;">返回</el-button>
+							<el-button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</el-button>
 						</view>
 					</form>
 				</view>
@@ -87,11 +89,15 @@
 </template>
 
 <script>
-	import "@/common/basic_method.js"
+	import "@/common/basic_method.js";
 	import {
 		generatesql,
 		executeSql,
-	} from "@/common/DB_method.js"
+	} from "@/common/DB_method.js";
+	import {
+		get_storage_in,
+		get_storage_out,
+	} from "@/common/util.js";
 	var graceChecker = require("../../common/graceChecker.js");
 
 	export default {
@@ -112,8 +118,17 @@
 				income: 0,
 				db: db,
 				table_name: table_name,
-				radioItems: global_setting['UploadSetting']['Tags'],
+				select_out: [],
+				select_in: [],
+				user_name_out: '',
+				user_name_in: '',
+				img_src: global_setting['UploadSetting']['img_src'],
 			}
+		},
+		onShow: function() {
+			// console.log('upload page');
+			this.select_out = get_storage_out(this.table_name);
+			this.select_in = get_storage_in(this.table_name);
 		},
 		methods: {
 			formSubmit: function(e) {
@@ -184,7 +199,7 @@
 			},
 			formReset: function(e) {
 				uni.navigateBack();
-			}
+			},
 		}
 	}
 </script>
@@ -220,5 +235,9 @@
 	
 	.uni-btn-v {
 		text-align: center;
+	}
+	
+	.category {
+		width: 50rpx;
 	}
 </style>

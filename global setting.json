@@ -4,25 +4,115 @@
 		"DayLimit": 100
 	},
 	"UploadSetting": {
-		"Tags": [{
+		"Out": [{
 				"value": "餐饮",
 				"checked": "true"
+			},
+			{
+				"value": "购物",
+				"checked": "true"
+			},
+			{
+				"value": "日用",
+				"checked": "true"
+			},
+			{
+				"value": "交通",
+				"checked": "true"
+			},
+			{
+				"value": "水果"
+			},
+			{
+				"value": "零食"
+			},
+			{
+				"value": "运动"
 			},
 			{
 				"value": "娱乐"
 			},
 			{
-				"value": "生活"
+				"value": "通讯"
 			},
 			{
-				"value": "学习"
+				"value": "服饰"
 			},
 			{
-				"value": "交通"
+				"value": "住房"
+			},
+			{
+				"value": "居家"
+			},
+			{
+				"value": "社交"
+			},
+			{
+				"value": "旅行"
+			},
+			{
+				"value": "医疗"
+			},
+			{
+				"value": "捐赠"
+			},
+			{
+				"value": "礼物"
+			},
+			{
+				"value": "书籍"
+			},
+			{
+				"value": "礼金"
 			},
 			{
 				"value": "其他"
 			}
-		]
+		],
+		"In": [{
+				"value": "工资",
+				"checked": "true"
+			},
+			{
+				"value": "兼职",
+				"checked": "true"
+			},
+			{
+				"value": "理财",
+				"checked": "true"
+			},
+			{
+				"value": "礼金",
+				"checked": "true"
+			},
+			{
+				"value": "其他"
+			}
+		],
+		"img_src": {
+			"餐饮":"../../static/select_icons/canyin.png",
+			"购物":"../../static/select_icons/gouwu.png",
+			"交通":"../../static/select_icons/jiaotong.png",
+			"日用":"../../static/select_icons/riyong.png",
+			"水果":"../../static/select_icons/shuiguo.png",
+			"零食":"../../static/select_icons/lingshi.png",
+			"运动":"../../static/select_icons/yundong.png",
+			"娱乐":"../../static/select_icons/yule.png",
+			"通讯":"../../static/select_icons/tongxun.png",
+			"服饰":"../../static/select_icons/fushi.png",
+			"住房":"../../static/select_icons/zhufang.png",
+			"居家":"../../static/select_icons/jujia.png",
+			"社交":"../../static/select_icons/shejiao.png",
+			"旅行":"../../static/select_icons/lvxing.png",
+			"医疗":"../../static/select_icons/yiliao.png",
+			"捐赠":"../../static/select_icons/juanzeng.png",
+			"礼物":"../../static/select_icons/liwu.png",
+			"书籍":"../../static/select_icons/shuji.png",
+			"礼金":"../../static/select_icons/lijin.png",
+			"其他":"../../static/select_icons/qita.png",
+			"工资":"../../static/select_icons/gongzi.png",
+			"兼职":"../../static/select_icons/jianzhi.png",
+			"理财":"../../static/select_icons/licai.png"
+		}
 	}
 }

@@ -41,6 +41,9 @@
 		<view class="uni-btn-v" style="text-align: center;">
 			<el-button type="danger" class="elbtn" style="width: 600rpx; font-size: 30rpx;" @click="Droptable">清除数据</el-button>
 		</view>
+		<view class="uni-btn-v" style="text-align: center;">
+			<el-button type="primary" class="elbtn" style="width: 600rpx; font-size: 30rpx;" @tap="navigateTo">设置标签</el-button>
+		</view>
 	</view>
 </template>
 
@@ -62,6 +65,11 @@
 			}
 		},
 		methods: {
+			navigateTo() {
+				uni.navigateTo({
+					url: 'set_tag'
+				})
+			},
 			setup() {
 				console.log("nothing happened!");
 			},

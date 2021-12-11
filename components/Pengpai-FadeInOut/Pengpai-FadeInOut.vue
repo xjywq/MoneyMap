@@ -4,7 +4,7 @@
 			ref="ani"
 			:animation="animationData"
 			class="message"
-			:style="{ top: top + 'px', left: left + 'px' }"
+			:style="{ top: top + 'rpx', left: left + 'rpx' }"
 		>
 			<view class="round bg-gradual-orange flex justify-start shadow" style="padding: 3px;">
 				<view @click="aa" class="cu-avatar cu-a-sm round" :style="{ backgroundImage: `url(${img})` }">
@@ -12,7 +12,7 @@
 					<image :src="img" class="avatarimg"></image>
 					<!-- #endif -->
 				</view>
-				<view v-if="show" class="padding-lr-sm flex align-center">
+				<view v-if="show" @click="aa" class="padding-lr-sm flex align-center">
 					<text class="text-sm">{{ txt }}</text>
 				</view>
 			</view>
@@ -82,15 +82,15 @@ export default {
 			if (this.show)
 				this.show=false;
 			else{
-				this.i=(this.i+1)%this.tips.length;
+				this.i = Math.floor((Math.random()*this.tips.length));
 				this.txt=this.tips[this.i];
 				this.show=true;
 			}
 		},
 		donghua() {
 			this.tips=this.contents;
-			this.txt=this.tips[0];
-			this.i=0;
+			this.i = Math.floor((Math.random()*this.tips.length));
+			this.txt=this.tips[this.i];
 			//进入
 			// #ifndef APP-NVUE
 			this.animationData = uni
