@@ -37,8 +37,8 @@
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v" >
-							<el-button type="success" class="elbtn" form-type="submit" style="font-size: 30rpx;">确认</el-button>
-							<el-button type="info" class="elbtn" @click="formReset" style="font-size: 30rpx;">返回</el-button>
+							<button type="success" class="elbtn" form-type="submit" style="font-size: 30rpx;">确认</button>
+							<button type="info" class="elbtn" @click="formReset" style="font-size: 30rpx;">返回</button>
 						</view>
 					</form>
 				</view>
@@ -78,8 +78,8 @@
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v">
-							<el-button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</el-button>
-							<el-button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</el-button>
+							<button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</button>
+							<button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</button>
 						</view>
 					</form>
 				</view>
@@ -144,10 +144,9 @@
 				if (checkRes) {
 					var sql_table =
 						'create table if not exists ' + this.table_name +
-						'("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
+						'("id" integer PRIMARY KEY autoincrement, "income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
 					var sql_query = generatesql(0, formData.price, formData.tag, formData.isimportant,
 						formData.comment, this.date, this.table_name);
-					console.log(sql_query);
 					executeSql(this.db, sql_table, sql_query);
 					setTimeout(function() {
 						uni.navigateBack();
@@ -177,7 +176,7 @@
 				if (checkRes) {
 					var sql_table =
 						'create table if not exists ' + this.table_name +
-						'("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
+						'("id" integer PRIMARY KEY autoincrement, "income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)';
 					var sql_query = generatesql(1, formData.price, formData.tag, formData.isimportant,
 						formData.comment, this.date, this.table_name);
 					console.log(sql_query);

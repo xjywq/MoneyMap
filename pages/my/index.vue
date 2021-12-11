@@ -54,13 +54,17 @@
 	} from '@/common/DB_method.js'
 	export default {
 		data() {
+			var username = uni.getStorageSync('uni-id');
+			if (!username) {
+				username = 'initial';
+			}
 			return {
 				check: false,
 				db: 'moneymap',
 				password: '',
 				password1: '',
 				hasUserInfo: uni.getStorageSync('hasUserInfo'),
-				username: uni.getStorageSync('uni-id'),
+				username: username,
 				avatar_path: uni.getStorageSync('avatar_path'),
 			}
 		},

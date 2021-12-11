@@ -28,6 +28,12 @@
 			}
 		},
 		{
+			"path": "pages/index/reload",
+			"style": {
+				"navigationBarTitleText": "修改"
+			}
+		},
+		{
 			"path": "App",
 			"style": {}
 		},

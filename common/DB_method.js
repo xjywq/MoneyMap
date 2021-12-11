@@ -20,7 +20,7 @@ export function generatesql(income, money, tags, isimportant, comment, t, table_
 	else
 		kwargs['isimportant'] = 0
 	var sql =
-		"insert into {table_name} values('{income}','{price}','{tags}','{comment}','{isimportant}', '{day}', '{time}')"
+		"insert into {table_name} values(NULL, '{income}','{price}','{tags}','{comment}','{isimportant}', '{day}', '{time}')"
 		.format(
 			kwargs)
 	return sql
@@ -63,6 +63,7 @@ export function selectSQL(table_name, sql) {
 }
 // 删除表
 export function droptable(db, table_name) {
+	console.log('drop table ' + table_name)
 	plus.sqlite.executeSql({
 		name: db,
 		sql: 'drop table ' + table_name,
@@ -115,7 +116,7 @@ export function createTable(db, table_name) {
 	plus.sqlite.executeSql({
 		name: db,
 		sql: 'create table if not exists ' + table_name +
-			'("income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)',
+			'("id" integer PRIMARY KEY autoincrement, "income" INT(1),"price" INT(10),"tags" TEXT(200),"comment" TEXT(200), "isimportant" INT(1), "day" DATE, "time" DATETIME)',
 		success: function(e) {
 			plus.sqlite.executeSql({
 				name: db,

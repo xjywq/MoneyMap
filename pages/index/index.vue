@@ -13,7 +13,7 @@
 			
 			<uni-table border stripe emptyText="无更多支出数据">
 				<uni-swipe-action v-for="record in sql_data.slice().reverse()" v-if="record.income==0">
-					<uni-swipe-action-item :left-options="options1" :right-options="options2" @click="bindClick">
+					<uni-swipe-action-item :right-options="modify(record['id'])" @click="bindClick">
 						<uni-tr>
 							<uni-td>{{record["tags"]}}</uni-td>
 							<uni-td>{{record["day"]}}</uni-td>
@@ -28,7 +28,7 @@
 			<qiun-title-bar title="收入" />
 			<uni-table border stripe emptyText="无更多收入数据">
 				<uni-swipe-action v-for="record in sql_data.slice().reverse()" v-if="record.income==1">
-					<uni-swipe-action-item :left-options="options1" :right-options="options2" @click="bindClick">
+					<uni-swipe-action-item :right-options="modify(record['id'])" @click="bindClick(record['id'])">
 						<uni-tr>
 							<uni-td>{{record["tags"]}}</uni-td>
 							<uni-td>{{record["day"]}}</uni-td>
@@ -73,22 +73,6 @@
 				cOpts: {},
 				edate: edate.format("YYYY-MM-DD"),
 				expect: 2000,
-				options1: [
-					{
-						text: '修改',
-						style: {
-						backgroundColor: '#007aff'
-						}
-					}
-				],
-				options2: [
-					{
-						text: '删除',
-						style: {
-						backgroundColor: '#dd524d'
-						}
-					}
-				]
 			};
 		},
 		onLoad: function() {
@@ -132,42 +116,28 @@
 				});
 			},
 			
-			bindClick(e,index) {
-				if (e.position === 'left'){
-							//进行数据修改
-							//具体用什么形式进行修改？
-							uni.showModal({
-								title: '提示',
-								content: '是否修改',
-								success: res => {
-									if (res.confirm) {
-										//修改表的这一行 要考虑的是如何处理数据库中的数据
-										
-										} 
-									else if (res.cancel) {
-										console.log('用户点击取消');
-										}
-									}
-							});		
-				};
+			bindClick(e) {
+				console.log("reload?id=" + e.content.id)
 				if (e.position === 'right'){
-					//进行数据删除	
-					uni.showModal({
-						title: '提示',
-						content: '是否删除',
-						success: res => {
-							if (res.confirm) {
-								//删除表的这一行 要考虑的是如何处理数据库中的数据
-								
-								} 
-							else if (res.cancel) {
-								console.log('用户点击取消');
-								}
-							}
-					});		
+					uni.navigateTo({
+						url: "reload?id=" + e.content.id
+					})
 				};
 			},
 			
+			modify(id) {
+				return [
+					{
+						id: id,
+						text: '修改',
+						style: {
+							backgroundColor: '#dd524d'
+						}
+					}
+				]
+			},
+						
+						
 			reload() {
 				var a = this;
 				plus.sqlite.selectSql({
