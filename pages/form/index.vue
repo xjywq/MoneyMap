@@ -69,19 +69,13 @@
 			<el-button type="primary" icon="el-icon-search" class="elbtn" style="font-size: 40rpx;" @click="updateClick">刷新</el-button>
 			</view>
 		</div>
-		<!-- </div> -->
-
-			<button @click="updateClick">刷新</button>
-
-
+		<button @click="updateClick">刷新</button>
 		</div>
-		<!-- </div> -->
 
-		<PengpaiFadeInOut @click="hideorshow" :left="10" :top="800" :radius="100" :contents="tips" />
+		<!--@click="hideorshow"-->
+		<PengpaiFadeInOut  :left="10" :top="700" :radius="100" :contents="tips" />
 
 
-
-		<!-- syh -->
 		<view v-if="show_chart">
 			<qiun-title-bar title="支出情况表" />
 			<uni-table border stripe emptyText="无更多数据">
