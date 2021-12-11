@@ -4,18 +4,13 @@
 			<image src="@/static/设置.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
 		</view>
 		<block v-if="hasUserInfo == false">
-<<<<<<< HEAD
 			<view class="uni-center" style="font-size:0; padding-left: 70rpx; padding-right: 100rpx;">
-=======
-			<view class="uni-center" style="font-size:0;">
->>>>>>> analysis
 				<image src="/static/default.jpeg"
 					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
 				<view class="uni-h2 uni-center uni-common-mt">未登录</view>
 				<input type="text" v-model="username" placeholder="用户名/邮箱/手机号" />
 				<input type="text" v-model="password" password="true" placeholder="密码" />
 				<input v-if="check == true" type="text" v-model="password1" password="true" placeholder="确认密码" />
-<<<<<<< HEAD
 			</view><br>
 			<view class="uni-flex uni-row" style="-webkit-justify-content: center;justify-content: center;">
 				<el-button v-if="check == true" class="elbtn" style="font-size: 30rpx; width: 600rpx;" type="success" @tap="register">确认</el-button>
@@ -25,23 +20,11 @@
 		</block>
 
 		<block v-if="hasUserInfo == true"> <!-- v-if="hasUserInfo == true" -->
-=======
-			</view>
-			<view class="uni-flex uni-row" style="-webkit-justify-content: center;justify-content: center;">
-				<button v-if="check == true" type="default" @tap="register">确认</button>
-				<button v-if="check == false" type="default" @tap="regis">注册</button>
-				<button v-if="check == false" type="default" @tap="login">登录</button>
-			</view>
-		</block>
-
-		<block v-if="hasUserInfo == true">
->>>>>>> analysis
 			<view @click="fileLoad" class="uni-center">
 				<image v-if="avatar_path == ''" src="/static/default.jpeg"
 					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
 				<image v-else :src="avatar_path"
 					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
-<<<<<<< HEAD
 			</view>
 			<view class="uni-h2 uni-center">{{username}}</view>
 			<view class="uni-center" style="background:#FFFFFF; font-size:0;">
@@ -58,22 +41,6 @@
 		<view class="uni-btn-v" style="text-align: center;">
 			<el-button type="danger" class="elbtn" style="width: 600rpx; font-size: 30rpx;" @click="Droptable">清除数据</el-button>
 		</view>
-=======
-			</view>
-			<view class="uni-h2 uni-center">{{username}}</view>
-			<view class="uni-center" style="background:#FFFFFF; font-size:0;">
-				<input v-if="check == true" type="text" v-model="password" password="true" placeholder="输入旧密码" />
-				<input v-if="check == true" type="text" v-model="password1" password="true" placeholder="输入新密码" />
-			</view>
-			<view class="uni-flex uni-row" style="-webkit-justify-content: center;justify-content: center;">
-				<!-- <button v-if="check == false" type="default" @tap="fileLoad">上传头像</button> -->
-				<button v-if="check == true" type="default" @tap="updatePwd">确认</button>
-				<button v-if="check == false" type="default" @tap="update">修改密码</button>
-				<button class="footer" v-if="check == false" type="default" @tap="logout">退出登录</button>
-			</view>
-		</block>
-		<view class="uni-btn-v"><button type="warn" @click="Droptable">清除数据</button></view>
->>>>>>> analysis
 	</view>
 </template>
 
@@ -387,7 +354,6 @@
 		background-color: #FFFFFF;
 		border-radius: 4px;
 		transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-<<<<<<< HEAD
 	}
 	
 	.elbtn {
@@ -395,7 +361,5 @@
 		height: 60rpx;
 		line-height: 45rpx;
 		font-size: 30rpx;
-=======
->>>>>>> analysis
 	}
 </style>

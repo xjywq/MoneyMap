@@ -5,18 +5,12 @@
 			<view class="char-box">
 				<qiun-data-charts type="arcbar" :chartData="cdata" background="none" />
 			</view>
-<<<<<<< HEAD
 			<view style="text-align: center;">
 			<el-button type="primary" class="jump" @tap="navigateTo" icon="el-icon-upload" style="font-size: 30rpx;">上传</el-button>
 			<el-button type="primary" class="jump" @tap="updateClick" icon="el-icon-search" style="font-size: 30rpx;">刷新</el-button><br><br>
 			</view>
 			<qiun-title-bar title="支出" />
 			
-=======
-			<button class="jump" @tap="navigateTo">上传</button>
-			<button class="jump" @tap="updateClick">刷新</button>
-			<qiun-title-bar title="支出" />
->>>>>>> analysis
 			<uni-table border stripe emptyText="无更多支出数据">
 				<uni-tr v-for="record in sql_data.slice().reverse()" v-if="record.income==0">
 					<uni-td>{{record["tags"]}}</uni-td>
@@ -69,10 +63,7 @@
 				table_name: table_name,
 				sql_data: [],
 				cdata: {},
-<<<<<<< HEAD
-=======
 				s: 0,
->>>>>>> analysis
 				cOpts: {},
 				edate: edate.format("YYYY-MM-DD"),
 				expect: 2000
@@ -157,10 +148,7 @@
 								"data": ratio,
 							}],
 						};
-<<<<<<< HEAD
-=======
 						a.s = a.cdata["series"][0]["data"]
->>>>>>> analysis
 						uni.stopPullDownRefresh();
 					},
 					fail: function(e) {
@@ -189,20 +177,18 @@
 		width: 100%;
 		height: 50px;
 	}
-<<<<<<< HEAD
 	
 	.jump{
 		width: 300rpx;
 		height: 60rpx;
 		line-height: 45rpx;
 		font-size: 30rpx;
-=======
+	}
 
 	.whatever-some-font {
 		font-family: "STKaiti";
 		font-size: 35rpx;
 		font-style: italic;
->>>>>>> analysis
 	}
 	
 </style>

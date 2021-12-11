@@ -1,8 +1,0 @@
-
-.photo {
-	border-radius: 50%;
-	overflow: hidden;
-	height: 200rpx;
-	width: 200rpx;
-}
-

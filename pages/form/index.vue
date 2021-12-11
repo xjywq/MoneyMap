@@ -1,17 +1,10 @@
 <template>
 	<view>
 		<!-- <div class="container"> -->
-<<<<<<< HEAD
 		<div class="container DataContainer" style="background-color: #D9ECFF;">
 			<qiun-title-bar :title="'日期: ' + date" />
 		</div>
 		<div class="container ChartContainer" style="background-color: #D9ECFF;">
-=======
-		<div class="container DataContainer">
-			<qiun-title-bar :title="'日期: ' + date" />
-		</div>
-		<div class="container ChartContainer">
->>>>>>> analysis
 			<qiun-title-bar title="统计时间" />
 			<view class="leave_cont">
 				<view class="ul">
@@ -37,28 +30,17 @@
 
 			<qiun-title-bar title="收支总览" />
 
-<<<<<<< HEAD
 			<uni-table border stripe emptyText="暂无更多数据" >
 				<!-- 表头行 -->
 				<uni-tr style="background-color: #FBFDE9;">
-=======
-			<uni-table border stripe emptyText="暂无更多数据">
-				<!-- 表头行 -->
-				<uni-tr>
->>>>>>> analysis
 					<uni-th align="center" width=80%>支出</uni-th>
 					<uni-th align="center" width=80%>收入</uni-th>
 					<uni-th align="center" width=80%>结余</uni-th>
 				</uni-tr>
 				<!-- 表格数据行 -->
-<<<<<<< HEAD
-				<uni-tr style="background-color: #FBFDE9;">
-					<uni-td align="center" v-for="(record, index) in outOpts['subtitle']"><text style="color: #FF0000;">￥{{record}}</text>
-=======
 				<uni-tr>
 					<uni-td align="center" v-for="(record, index) in outOpts['subtitle']"><text
 							style="color: #FF0000;">￥{{record}}</text>
->>>>>>> analysis
 					</uni-td>
 					<uni-td align="center" v-for="(record, index) in inOpts['subtitle']"><text>￥{{record}}</text>
 					</uni-td>
@@ -79,23 +61,16 @@
 			<view v-if="outData.series[0].data.length" class="charts-box">
 				<qiun-data-charts type="rose" :opts="outOpts" :chartData="outData" />
 			</view>
-<<<<<<< HEAD
-			
-=======
-
->>>>>>> analysis
 			<qiun-title-bar v-if="inData.series[0].data.length" title="收入情况" />
 			<view v-if="inData.series[0].data.length" class="charts-box" @longpress="inDetail">
 				<qiun-data-charts type="rose" :opts="inOpts" :chartData="inData" />
 			</view>
-<<<<<<< HEAD
 			<view style="text-align: center;">
 			<el-button type="primary" icon="el-icon-search" class="elbtn" style="font-size: 40rpx;" @click="updateClick">刷新</el-button>
 			</view>
 		</div>
 		<!-- </div> -->
 
-=======
 			<button @click="updateClick">刷新</button>
 
 
@@ -104,7 +79,6 @@
 
 		<PengpaiFadeInOut @click="hideorshow" :left="10" :top="800" :radius="100" :contents="tips" />
 
->>>>>>> analysis
 
 
 		<!-- syh -->
@@ -152,15 +126,7 @@
 	import PengpaiFadeInOut from "@/components/Pengpai-FadeInOut/Pengpai-FadeInOut.vue";
 	import "@/common/basic_method.js";
 	import {
-		dateUtils
-	} from "@/common/util.js";
-	import * as GlobalSetting from "@/global setting.json";
-	import {
-		generatesql,
-		openDB,
 		createTable,
-		closeDB,
-		executeSql
 	} from "@/common/DB_method.js"
 
 	export default {
@@ -282,16 +248,9 @@
 					incount = 0;
 				var outData = {},
 					inData = {};
-				var linedata = {};
-				var in_co = {},
-					out_co = {},
-					sub_co = {};
 				var l1 = this.datelist(),
 					l2 = this.datelist();
 				var sd = Date.parse(this.start_date);
-<<<<<<< HEAD
-
-=======
 				var daycost = {};
 				var eat = 0;
 				var total = 0;
@@ -301,7 +260,6 @@
 				var myDate = "";
 				var Date1 = "";
 				var maxprice = 0;
->>>>>>> analysis
 				sql_data.forEach(function(item) {
 					var ed = Date.parse(item["day"]);
 					var delta_date = (ed - sd) / (1 * 24 * 60 * 60 * 1000);
@@ -314,10 +272,7 @@
 					} else {
 						outcount += item["price"];
 						l2[delta_date - 1] += item["price"];
-<<<<<<< HEAD
-=======
 						if (item["tags"] == "餐饮") eat += item["price"];
->>>>>>> analysis
 						if (!outData.hasOwnProperty(item["tags"])) outData[item["tags"]] = item["price"];
 						else outData[item["tags"]] += item["price"];
 						total += item["price"];
@@ -334,8 +289,6 @@
 						else daycost[Date1] += item["price"];
 					}
 				});
-<<<<<<< HEAD
-=======
 				var maxday = "";
 				for (var i = 0; i < 7; i++) {
 					if (daycost.hasOwnProperty(weekDay[i])) {
@@ -357,7 +310,6 @@
 					this.maxdayratio = daycost[maxday] * 100 / (total / 7);
 					this.maxdayratio = this.maxdayratio.toFixed(2);
 				}
->>>>>>> analysis
 				this.outOpts = {
 					legend: {
 						position: 'bottom'
@@ -423,8 +375,6 @@
 					]
 				};
 				this.show_chart = true;
-<<<<<<< HEAD
-=======
 				this.tips.push("您本月收入与预算比为" + this.ratio);
 				this.tips.push("您本月恩格尔系数为" + this.Engel);
 				this.tips.push('本月最多的开销种类为"' + this.maxtag + '"');
@@ -438,7 +388,6 @@
 					this.tips.push("预算紧张，要精打细算啦！");
 				this.tips.push('本月最大单笔开销种类为"' + this.maxitem + '"');
 				this.tips.push("我们发现，您在" + this.maxday + "的平均开销最大，高于平均值" + this.maxdayratio);
->>>>>>> analysis
 			},
 
 			reload() {
@@ -460,12 +409,8 @@
 				this.show_chart = false;
 
 				var sqlWhere = (this.start_date == '无') ? '' : ' WHERE day >= "' + this.start_date + '"';
-<<<<<<< HEAD
-				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') + ' day <= "' + this.end_date + '"'
-=======
 				sqlWhere += (this.end_date == '无') ? '' : ((sqlWhere == '' ? ' WHERE' : ' AND') + ' day <= "' + this
 					.end_date + '"'
->>>>>>> analysis
 				);
 				plus.sqlite.selectSql({
 					name: 'moneymap',
@@ -557,13 +502,10 @@
 		width: 100%;
 		height: 200px;
 	}
-<<<<<<< HEAD
 	
 	.elbtn{
 		width: 400rpx;
 		height: 80rpx;
 		line-height: 60rpx;
 	}
-=======
->>>>>>> analysis
 </style>
