@@ -31,10 +31,6 @@
 				</uni-tr>
 			</uni-table><br>
 		</view>
-		<!-- <view class="uni-btn-v"><button type="primary" @click="OpenDB">打开数据库Mymoney.db</button></view> -->
-		<!-- <view class="uni-btn-v"><button type="primary" @click="moveTable">转移table的数据</button></view> -->
-		<!-- <view class="uni-btn-v"><button type="primary" @click="Droptable">删除table</button></view> -->
-		<!-- <view class="uni-btn-v"><button type="primary" @click="CloseDB">关闭数据库Mymoney.db</button></view> -->
 	</view>
 </template>
 
@@ -96,19 +92,6 @@
 				selectSQL(this.db, 'select * from ' + this.table_name);
 			},
 			// 转移数据
-			moveTable: function() {
-				var table_name1 = 'xiaoming';
-				var table_name2 = 'initial';
-				moveTable(this.db, table_name1, table_name2);
-			},
-			// 删除表
-			Droptable: function() {
-				droptable(this.db, this.table_name);
-			},
-			// 关闭数据库
-			CloseDB: function() {
-				closeDB(this.db);
-			},
 			navigateTo() {
 				uni.navigateTo({
 					url: 'upload'

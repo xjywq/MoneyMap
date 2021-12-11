@@ -18,7 +18,7 @@
 								<view class="uni-list-cell" v-for="item in select_out">
 									<view>
 										<radio id="item.value" :value="item" :checked="true"></radio>
-										<image class="image" mode="widthFix" :src="img_src[item]" />
+										<image class="category" mode="widthFix" :src="img_src[item]" />
 									</view>
 									<label class="label-2-text">
 										<text>{{item}}</text>
@@ -59,7 +59,7 @@
 								<view class="uni-list-cell" v-for="item in select_in">
 									<view>
 										<radio id="item.value" :value="item" :checked="true"></radio>
-										<image class="image" mode="widthFix" :src="img_src[item]" />
+										<image class="category" mode="widthFix" :src="img_src[item]" />
 									</view>
 									<label class="label-2-text">
 										<text>{{item}}</text>
@@ -89,11 +89,15 @@
 </template>
 
 <script>
-	import "@/common/basic_method.js"
+	import "@/common/basic_method.js";
 	import {
 		generatesql,
 		executeSql,
-	} from "@/common/DB_method.js"
+	} from "@/common/DB_method.js";
+	import {
+		get_storage_in,
+		get_storage_out,
+	} from "@/common/util.js";
 	var graceChecker = require("../../common/graceChecker.js");
 
 	export default {
@@ -121,24 +125,10 @@
 				img_src: global_setting['UploadSetting']['img_src'],
 			}
 		},
-		onShow: function() {	//获得缓存中对应的标签
+		onShow: function() {
 			// console.log('upload page');
-			
-			var user_id = '';
-			try {	//获取支出
-			    user_id = uni.getStorageSync('uni-id');
-			    if (user_id) {
-			        // console.log('log in and get id',user_id);
-			    } else {
-					user_id = 'xiaoming';
-					// console.log('not log in');
-				}
-			} catch (e) {
-			    console.log('error: get_user');
-			}
-			this.get_user(user_id);	//根据用户名获得缓存
-			this.get_storage_out();
-			this.get_storage_in();
+			this.select_out = get_storage_out(this.table_name);
+			this.select_in = get_storage_in(this.table_name);
 		},
 		methods: {
 			formSubmit: function(e) {
@@ -210,37 +200,6 @@
 			formReset: function(e) {
 				uni.navigateBack();
 			},
-			get_user: function(user_name) {
-				this.user_name_in = user_name+"_in";
-				// console.log(user_name+"_in")
-				this.user_name_out = user_name+"_out";
-				// console.log(user_name+"_out")
-			},
-			
-			get_storage_out: function() {
-				try {	//获取支出
-				    this.select_out = uni.getStorageSync(this.user_name_out);
-				    if (this.select_out) {
-				        // console.log('select_out',this.select_out);
-				    } else {
-						// console.log('nothing in '+this.user_name_out)
-					}
-				} catch (e) {
-				    console.log('error: get_storage_out');
-				}
-			},
-			get_storage_in: function() {
-				try {	//获取收入
-				    this.select_in = uni.getStorageSync(this.user_name_in);
-				    if (this.select_in) {
-				        // console.log('select_in',this.select_in);
-				    } else {
-						// console.log('nothing in '+this.user_name_in)
-					}
-				} catch (e) {
-				    console.log('error: get_storage_in');
-				}
-			},
 		}
 	}
 </script>
@@ -276,5 +235,9 @@
 	
 	.uni-btn-v {
 		text-align: center;
+	}
+	
+	.category {
+		width: 50rpx;
 	}
 </style>

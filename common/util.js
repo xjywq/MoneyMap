@@ -9,7 +9,7 @@ function formatTime(time) {
 	time = time % 60
 	var second = time
 
-	return ([hour, minute, second]).map(function (n) {
+	return ([hour, minute, second]).map(function(n) {
 		n = n.toString()
 		return n[1] ? n : '0' + n
 	}).join(':')
@@ -37,7 +37,7 @@ var dateUtils = {
 		'小时': 3600000,
 		'分钟': 60000,
 	},
-	humanize: function (milliseconds) {
+	humanize: function(milliseconds) {
 		var humanize = '';
 		for (var key in this.UNITS) {
 			if (milliseconds >= this.UNITS[key]) {
@@ -47,14 +47,14 @@ var dateUtils = {
 		}
 		return humanize || '刚刚';
 	},
-	format: function (date, isformat=false) {
+	format: function(date, isformat = false) {
 		// data: Date类对象, isformat: 是否转换成"...前"的格式
 		var diff = Date.now() - date.getTime();
 		if (diff < this.UNITS['天'] && isformat) {
 			// 如果超过1天, 则显示完整日期
 			return this.humanize(diff);
 		}
-		var _format = function (number) {
+		var _format = function(number) {
 			// 添加前缀0
 			return (number < 10 ? ('0' + number) : number);
 		};
@@ -63,9 +63,34 @@ var dateUtils = {
 	}
 };
 
+function get_storage_out(user_name) {
+	try {
+		select_out = uni.getStorageSync(user_name+"_out");
+		if (!select_out) {
+			console.log('nothing out ' + user_name);
+		}
+	} catch (e) {
+		console.log('error: get_storage_out');
+	}
+	return select_out
+};
+
+function get_storage_in(user_name) {
+	try {
+		select_in = uni.getStorageSync(user_name+"_in");
+		if (!select_in) {
+			console.log('nothing in ' + user_name);
+		}
+	} catch (e) {
+		console.log('error: get_storage_in');
+	}
+	return select_in
+};
+
 module.exports = {
 	formatTime: formatTime,
 	formatLocation: formatLocation,
-	dateUtils: dateUtils
+	dateUtils: dateUtils,
+	get_storage_out: get_storage_out,
+	get_storage_in: get_storage_in,
 }
-

@@ -10,14 +10,14 @@
 						<view>
 							<checkbox :value="item" :checked="true"></checkbox>	
 						</view>
-						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
+						<view>{{item}}<image class="category" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 					
 					<label class="uni-list-cell uni-list-cell-pd" v-for="item in not_mark_out" :key="item">
 						<view>
 							<checkbox :value="item" :checked="false"></checkbox>	
 						</view>
-						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
+						<view>{{item}}<image class="category" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 				</checkbox-group>
 			</view>
@@ -29,14 +29,14 @@
 						<view>
 							<checkbox :value="item" :checked="true"></checkbox>	
 						</view>
-						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
+						<view>{{item}}<image class="category" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 					
 					<label class="uni-list-cell uni-list-cell-pd" v-for="item in not_mark_in" :key="item">
 						<view>
 							<checkbox :value="item" :checked="false"></checkbox>	
 						</view>
-						<view>{{item}}<image class="image" mode="widthFix" :src="img_src[item]" /></view>
+						<view>{{item}}<image class="category" mode="widthFix" :src="img_src[item]" /></view>
 					</label>
 				</checkbox-group>
 			</view>
@@ -78,7 +78,7 @@
 			    if (user_id) {
 			        // console.log('log in and get id',user_id);
 			    } else {
-					user_id = 'xiaoming';
+					user_id = 'initial';
 					// console.log('not log in');
 				}
 			} catch (e) {
@@ -170,7 +170,6 @@
 				this.not_mark_in = [];
 				for(var k in this.radioItems_in){
 					if (this.select_in.indexOf(this.radioItems_in[k]["value"]) == -1){
-						
 						this.not_mark_in.push(this.radioItems_in[k]["value"]);
 					}
 				}
@@ -192,4 +191,8 @@
     .label-2-text {
         flex: 1;
     }
+	
+	.category {
+		width: 50rpx;
+	}
 </style>
