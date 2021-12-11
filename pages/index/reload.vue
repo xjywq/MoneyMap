@@ -17,11 +17,11 @@
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_out">
 									<view>
-										<radio id="item.value" :value="item" :checked="true"></radio>
-										<image class="category" mode="widthFix" :src="img_src[item]" />
+										<radio id="item.value" :value="item['value']" :checked="item['checked']"></radio>
+										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
 									</view>
 									<label class="label-2-text">
-										<text>{{item}}</text>
+										<text>{{item['value']}}</text>
 									</label>
 								</view>
 							</radio-group>
@@ -36,10 +36,8 @@
 							<view class="title">备注</view>
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
-						<view class="uni-btn-v">
-							<button type="success" class="elbtn" form-type="submit"
-								style="font-size: 30rpx;">确认</button>
-							<button class="elbtn" type="success" @click="formdel" style="font-size: 30rpx;">删除</button>
+						<view class="uni-btn-v" >
+							<button type="success" class="elbtn" form-type="submit" style="font-size: 30rpx;">确认</button>
 							<button type="info" class="elbtn" @click="formReset" style="font-size: 30rpx;">返回</button>
 						</view>
 					</form>
@@ -60,11 +58,11 @@
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_in">
 									<view>
-										<radio id="item.value" :value="item" :checked="true"></radio>
-										<image class="category" mode="widthFix" :src="img_src[item]" />
+										<radio id="item.value" :value="item['value']" :checked="item['checked']"></radio>
+										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
 									</view>
 									<label class="label-2-text">
-										<text>{{item}}</text>
+										<text>{{item['value']}}</text>
 									</label>
 								</view>
 							</radio-group>
@@ -80,9 +78,7 @@
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v">
-							<button class="elbtn" type="success" form-type="submit"
-								style="font-size: 30rpx;">确认</button>
-							<button class="elbtn" type="success" @click="formdel" style="font-size: 30rpx;">删除</button>
+							<button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</button>
 							<button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</button>
 						</view>
 					</form>
