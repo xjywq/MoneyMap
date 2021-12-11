@@ -66,20 +66,16 @@
 			}
 		],
 		"In": [{
-				"value": "工资",
-				"checked": "true"
+				"value": "工资"
 			},
 			{
-				"value": "兼职",
-				"checked": "true"
+				"value": "兼职"
 			},
 			{
-				"value": "理财",
-				"checked": "true"
+				"value": "理财"
 			},
 			{
-				"value": "礼金",
-				"checked": "true"
+				"value": "礼金"
 			},
 			{
 				"value": "其他"

@@ -73,7 +73,23 @@ function get_storage_out(user_name) {
 	} catch (e) {
 		console.log('error: get_storage_out');
 	}
-	return select_out
+	var dic_out = [];
+	for (let i in select_out) {
+		if (i == 0){
+			dic_out.push({
+				"value": select_out[i],
+				"checked": true
+			});
+		}
+		else {
+			dic_out.push({
+				"value": select_out[i],
+				"checked": false
+			});
+		}
+	}
+	console.log(dic_out[0]['value']);
+	return dic_out
 };
 
 function get_storage_in(user_name) {
@@ -81,12 +97,28 @@ function get_storage_in(user_name) {
 		select_in = uni.getStorageSync(user_name+"_in");
 		if (!select_in) {
 			console.log('nothing in ' + user_name);
-			select_in = ["其他", "工资", "兼职", "理财"];
+			select_in = ["工资", "兼职", "理财", "其他"];
 		}
 	} catch (e) {
 		console.log('error: get_storage_in');
 	}
-	return select_in
+	var dic_in = [];
+	for (let i in select_in) {
+		if (i == 0){
+			dic_in.push({
+				"value": select_in[i],
+				"checked": true
+			});
+		}
+		else {
+			dic_in.push({
+				"value": select_in[i],
+				"checked": false
+			});
+		}
+	}
+	console.log(dic_in[0]['value']);
+	return dic_in
 };
 
 module.exports = {

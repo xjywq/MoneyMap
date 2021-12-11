@@ -17,11 +17,11 @@
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_out">
 									<view>
-										<radio id="item.value" :value="item" :checked="false"></radio>
-										<image class="category" mode="widthFix" :src="img_src[item]" />
+										<radio id="item.value" :value="item['value']" :checked="item['checked']"></radio>
+										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
 									</view>
 									<label class="label-2-text">
-										<text>{{item}}</text>
+										<text>{{item['value']}}</text>
 									</label>
 								</view>
 							</radio-group>
@@ -58,11 +58,11 @@
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_in">
 									<view>
-										<radio id="item.value" :value="item" :checked="false"></radio>
-										<image class="category" mode="widthFix" :src="img_src[item]" />
+										<radio id="item.value" :value="item['value']" :checked="item['checked']"></radio>
+										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
 									</view>
 									<label class="label-2-text">
-										<text>{{item}}</text>
+										<text>{{item['value']}}</text>
 									</label>
 								</view>
 							</radio-group>
@@ -129,6 +129,7 @@
 			// console.log('upload page');
 			this.select_out = get_storage_out(this.table_name);
 			this.select_in = get_storage_in(this.table_name);
+			console.log(this.select_in);
 		},
 		methods: {
 			formSubmit: function(e) {
