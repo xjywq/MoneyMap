@@ -54,6 +54,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/my/share",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "统计数据",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
