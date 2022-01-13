@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="uni-flex uni-row" style="-webkit-justify-content: flex-end;justify-content: flex-end;">
-			<image src="@/static/设置.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
+			<image src="@/static/setting.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
 		</view>
 		<block v-if="hasUserInfo == false">
 			<view class="uni-center" style="font-size:0; padding-left: 70rpx; padding-right: 100rpx;">

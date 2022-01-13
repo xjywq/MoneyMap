@@ -369,6 +369,7 @@
 					]
 				};
 				this.show_chart = true;
+				this.tips = [];
 				this.tips.push("您本月收入与预算比为" + this.ratio);
 				this.tips.push("您本月恩格尔系数为" + this.Engel);
 				this.tips.push('本月最多的开销种类为"' + this.maxtag + '"');

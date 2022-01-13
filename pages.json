@@ -7,33 +7,28 @@
 				"navigationBarTitleText": "记录",
 				"enablePullDownRefresh": true
 			}
-		},
-		{
+		},{
 			"path": "pages/form/index",
 			"style": {
 				"navigationBarTitleText": "报表",
 				"enablePullDownRefresh": true
 			}
-		},
-		{
+		},{
 			"path": "pages/my/index",
 			"style": {
 				"navigationBarTitleText": "我"
 			}
-		},
-		{
+		},{
 			"path": "pages/index/upload",
 			"style": {
 				"navigationBarTitleText": "上传"
 			}
-		},
-		{
+		},{
 			"path": "pages/index/reload",
 			"style": {
 				"navigationBarTitleText": "修改"
 			}
-		},
-		{
+		},{
 			"path": "App",
 			"style": {}
 		},

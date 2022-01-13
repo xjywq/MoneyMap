@@ -2,7 +2,7 @@
 	<view class="content">
 		<block v-if="hasUserInfo == false">
 			<view class="uni-flex uni-row" style="-webkit-justify-content: flex-end;justify-content: flex-end;">
-			<image src="@/static/设置.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
+			<image src="@/static/setting.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
 			</view>
 			<view class="uni-center" style="font-size:0;">
 				<image src="/static/default.jpeg" style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
@@ -19,7 +19,7 @@
 		</block>
 		<block v-if="hasUserInfo == true">
 			<view class="uni-flex uni-row" style="-webkit-justify-content: flex-end;justify-content: flex-end;">
-			<image src="@/static/设置.png" style="width: 30px;height: 30px;" @tap="setup"></image>
+			<image src="@/static/setting.png" style="width: 30px;height: 30px;" @tap="setup"></image>
 			</view>
 			<view class="uni-center" style=" font-size:0;">
 				<image v-if="avatar_path == ''" src="/static/default.jpeg" style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>

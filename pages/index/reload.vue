@@ -79,6 +79,7 @@
 						</view>
 						<view class="uni-btn-v">
 							<button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</button>
+							<button class="elbtn" type="success" @click="formdel" style="font-size: 30rpx;">删除</button>
 							<button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</button>
 						</view>
 					</form>
