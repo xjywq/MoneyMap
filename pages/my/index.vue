@@ -35,7 +35,10 @@
 				<!-- <button v-if="check == false" type="default" @tap="fileLoad">上传头像</button> -->
 				<el-button v-if="check == true" class="elbtn" style="font-size: 30rpx; width: 600rpx;" type="primary" @tap="updatePwd">确认</el-button>
 				<el-button v-if="check == false" class="elbtn" style="font-size: 30rpx;" type="success" @tap="update">修改密码</el-button>
-				<el-button v-if="check == false" class="elbtn" style="font-size: 30rpx;" type="warning" @tap="logout">退出登录</el-button>
+				<el-button v-if="check == false" class="elbtn" style="font-size: 30rpx;" type="warning" @tap="logout">退出登录</el-button><br>
+			</view>
+			<view class="uni-btn-v" style="text-align: center;">
+				<el-button v-if="check == false" class="elbtn" style="width: 600rpx; font-size: 30rpx;" type="info" @tap="upload_confirm">上传数据</el-button>
 			</view><br>
 		</block>
 		<view class="uni-btn-v" style="text-align: center;">
@@ -350,6 +353,26 @@
 					}
 				})
 			},
+			
+			upload_confirm: function() {
+				var a = this;
+				uni.showModal({
+					title: '确认信息',
+					content: '您确定要将数据上传吗',
+					confirmColor: '#44AAFF',
+					success(res) {
+						if (res.confirm) {
+							a.update();
+						}
+					}
+				})
+			},
+			
+			update: function() {
+				uni.navigateTo({
+					url: "share"
+				});
+			}
 		},
 	}
 </script>
