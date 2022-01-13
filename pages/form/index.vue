@@ -293,7 +293,7 @@
 				this.maxday = maxday;
 				this.maxitem = maxitem;
 				this.maxtag = maxtag;
-				this.ratio = total / 2000;
+				this.ratio = total / 20;
 				this.ratio = this.ratio.toFixed(2);
 				if (total == 0) {
 					this.Engel = 0;
@@ -302,7 +302,7 @@
 					this.Engel = eat / total;
 					this.Engel = this.Engel.toFixed(2);
 					this.maxdayratio = daycost[maxday] * 100 / (total / 7);
-					this.maxdayratio = this.maxdayratio.toFixed(2);
+					this.maxdayratio = this.maxdayratio.toFixed(1);
 				}
 				this.outOpts = {
 					legend: {
@@ -370,11 +370,11 @@
 				};
 				this.show_chart = true;
 				this.tips = [];
-				this.tips.push("您本月收入与预算比为" + this.ratio);
+				this.tips.push("您本月目前的支出占预算的" + this.ratio + "%");
 				this.tips.push("您本月恩格尔系数为" + this.Engel);
 				this.tips.push('本月最多的开销种类为"' + this.maxtag + '"');
 				if (this.Engel < 0.4 && this.Engel > 0)
-					this.tips.push("悄悄告诉你，恩格尔系数较低，可以考虑适当进行理财哦~");
+					this.tips.push("悄悄告诉您，恩格尔系数较低，可以考虑适当进行理财哦~");
 				if (this.ratio < 0.3)
 					this.tips.push("这个月预算还很充足！^_^");
 				if (this.ratio >= 0.3 && this.ratio < 0.7)
@@ -382,7 +382,7 @@
 				if (this.ratio >= 0.7)
 					this.tips.push("预算紧张，要精打细算啦！");
 				this.tips.push('本月最大单笔开销种类为"' + this.maxitem + '"');
-				this.tips.push("我们发现，您在" + this.maxday + "的平均开销最大，高于平均值" + this.maxdayratio);
+				this.tips.push("您在" + this.maxday + "的平均开销最大，是每日均值的" + this.maxdayratio + "%");
 			},
 
 			reload() {

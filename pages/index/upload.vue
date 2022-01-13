@@ -9,10 +9,10 @@
 					<form @submit="formSubmit" @reset="formReset" ref="submit_form">
 						<view class="uni-form-item uni-column">
 							<view class="title">价格</view>
-							<input class="uni-input" v-model="price" number="true" name="price" focus
+							<input class="uni-input" v-model="price" number="true" name="price" type="number" focus
 								placeholder="请输入价格" />
 						</view>
-						<view class="uni-form-item uni-column">
+						<view class="uni-form-item uni-column tabs">
 							<view class="title">标签</view>
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_out">
@@ -32,13 +32,15 @@
 								<switch name="isimportant" checked="true" />
 							</view>
 						</view>
-						<view class="uni-form-item uni-column">
+						<view class="uni-form-item uni-column"> 
 							<view class="title">备注</view>
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v" >
-							<button type="success" class="elbtn" form-type="submit" style="font-size: 30rpx;">确认</button>
-							<button type="info" class="elbtn" @click="formReset" style="font-size: 30rpx;">返回</button>
+							<button type="success"class="elbtn" form-type="submit" style="background-color: #32CD32;">确认</button>
+						</view>
+						<view class="uni-btn-v" >
+							<button type="info" class="elbtn" @click="formReset" style="background-color: #B22222;">返回</button>
 						</view>
 					</form>
 				</view>
@@ -51,9 +53,9 @@
 					<form @submit="formSubmit1" @reset="formReset" ref="submit_form">
 						<view class="uni-form-item uni-column">
 							<view class="title">价格</view>
-							<input class="uni-input" v-model="price" number="true" name="price" placeholder="请输入价格" />
+							<input class="uni-input" v-model="price" number="true" name="price" type="number" placeholder="请输入价格" />
 						</view>
-						<view class="uni-form-item uni-column">
+						<view class="uni-form-item uni-column tabs">
 							<view class="title">标签</view>
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_in">
@@ -78,8 +80,10 @@
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v">
-							<button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</button>
-							<button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</button>
+							<button class="elbtn" type="success"form-type="submit" style="background-color: #33cc33;">确认</button>
+						</view>
+						<view class="uni-btn-v" >
+							<button class="elbtn" type="info" form-type="reset" style="background-color: #B22222;">返回</button>
 						</view>
 					</form>
 				</view>
@@ -129,7 +133,6 @@
 			// console.log('upload page');
 			this.select_out = get_storage_out(this.table_name);
 			this.select_in = get_storage_in(this.table_name);
-			console.log(this.select_in);
 		},
 		methods: {
 			formSubmit: function(e) {
@@ -230,14 +233,24 @@
 		width: 300rpx;
 		height: 60rpx;
 		line-height: 45rpx;
-		font-size: 30rpx;
+		font-size: 35rpx;
+		text-align: center;
 	}
 	
 	.uni-btn-v {
 		text-align: center;
+		display: flex;    /*设置显示样式**/
+		align-items: center;    /**子view垂直居中*/
+		justify-content: center; /**内容居中*/
+		padding: 0 0 0 0;
+		margin: 0 0 0 0;
 	}
 	
 	.category {
 		width: 50rpx;
+	}
+	
+	.tabs {
+		height: 400rpx;
 	}
 </style>

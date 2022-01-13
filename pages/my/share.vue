@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<qiun-title-bar title="各省大学生月均消费统计" />
+		<qiun-title-bar title="各省用户月均消费统计" />
 		<br>
 		<view class="charts-box" style="height: 400px;">
 		  <qiun-data-charts type="map" :opts="{extra:{map:{mercator:true}}}" :chartData="chartsDataMap"/>

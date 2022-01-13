@@ -1,10 +1,10 @@
 <template>
 	<view class="content">
-		<view class="uni-flex uni-row" style="-webkit-justify-content: flex-end;justify-content: flex-end;">
+		<!-- <view class="uni-flex uni-row" style="-webkit-justify-content: flex-end;justify-content: flex-end;">
 			<image src="@/static/setting.png" style="padding: 3px; width: 25px;height: 25px;" @tap="setup"></image>
-		</view>
+		</view> -->
 		<block v-if="hasUserInfo == false">
-			<view class="uni-center" style="font-size:0; padding-left: 70rpx; padding-right: 100rpx;">
+			<view class="uni-center" style="font-size:0; padding-left: 70rpx; padding-right: 100rpx; padding-top: 150rpx;">
 				<image src="/static/default.jpeg"
 					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
 				<view class="uni-h2 uni-center uni-common-mt">未登录</view>
@@ -20,7 +20,7 @@
 		</block>
 
 		<block v-if="hasUserInfo == true"> <!-- v-if="hasUserInfo == true" -->
-			<view @click="fileLoad" class="uni-center">
+			<view @click="fileLoad" class="uni-center" style="font-size:0; padding-left: 70rpx; padding-right: 100rpx; padding-top: 150rpx;">
 				<image v-if="avatar_path == ''" src="/static/default.jpeg"
 					style="border-radius: 50%;text-align: center; width: 70px;height: 70px;"></image>
 				<image v-else :src="avatar_path"
@@ -38,7 +38,8 @@
 				<el-button v-if="check == false" class="elbtn" style="font-size: 30rpx;" type="warning" @tap="logout">退出登录</el-button><br>
 			</view>
 			<view class="uni-btn-v" style="text-align: center;">
-				<el-button v-if="check == false" class="elbtn" style="width: 600rpx; font-size: 30rpx;" type="info" @tap="upload_confirm">上传数据</el-button>
+				<el-button v-if="check == false" class="elbtn" style="width: 600rpx; font-size: 30rpx;" type="primary" @tap="upload_confirm">上传数据</el-button>
+				<el-button v-if="check == false" class="elbtn" style="width: 600rpx; font-size: 30rpx;" type="primary" @tap="restore">恢复数据</el-button>
 			</view><br>
 		</block>
 		<view class="uni-btn-v" style="text-align: center;">
@@ -53,7 +54,8 @@
 <script>
 	import {
 		moveTable,
-		droptable
+		droptable,
+		checktable
 	} from '@/common/DB_method.js'
 	export default {
 		data() {
@@ -136,6 +138,7 @@
 									uni.setStorageSync('hasUserInfo', true)
 									uni.setStorageSync('avatar_path', '')
 									moveTable(a.db, a.username, 'initial');
+									droptable(a.db, 'initial')
 								} else
 									uni.showModal({
 										showCancel: false,
@@ -154,6 +157,32 @@
 				}
 				this.check = false;
 				this.password1 = ""
+			},
+			restore() {
+				var a = this;
+				uni.showModal({
+					title: '警告',
+					showCancel: true,
+					content: '您确定要从云端恢复数据吗?\n本地数据将会被覆盖',
+					success(res) {
+						if (res.confirm) {
+							plus.sqlite.selectSql({
+								name: a.db,
+								sql: 'select 1 from ' + a.username+'_backup',
+								success: function(e) {
+									droptable(a.db, a.username)
+									moveTable(a.db, a.username, a.username+'_backup');
+								},
+								fail: function(e) {
+									uni.showToast({
+										icon: 'error',
+										title: "备份不存在!"
+									})
+								}
+							});
+						}
+					}
+				})
 			},
 			login() {
 				var a = this
@@ -289,8 +318,10 @@
 					itemList: ["查看头像", "从相册选择图片"],
 					success(e) {
 						var index = e.tapIndex
-						console.log("!!!")
 						if (index === 0) {
+							if (a.avatar_path == '') {
+								a.avatar_path = '/static/default.jpeg';
+							}
 							let arr = [a.avatar_path]
 							uni.previewImage({
 								urls: arr
@@ -301,8 +332,8 @@
 								sizeType: ['compressed'],
 								sourceType: ['album'],
 								crop: {
-									width: 50,
-									height: 50,
+									width: 100,
+									height: 100,
 								},
 								success: function(res) {
 									a.avatar_path = res.tempFilePaths["0"]
@@ -358,10 +389,12 @@
 				var a = this;
 				uni.showModal({
 					title: '确认信息',
-					content: '您确定要将数据上传吗',
+					content: '您确定要将数据上传吗\n我们不会泄露您的个人信息',
 					confirmColor: '#44AAFF',
 					success(res) {
 						if (res.confirm) {
+							droptable(a.db, a.username+'_backup');
+							moveTable(a.db, a.username+'_backup', a.username);
 							a.update();
 						}
 					}
@@ -396,5 +429,7 @@
 		height: 60rpx;
 		line-height: 45rpx;
 		font-size: 30rpx;
+		margin-top: 20rpx;
 	}
+
 </style>

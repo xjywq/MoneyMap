@@ -42,5 +42,7 @@
 		line-height: 24rpx;
 	}
 	
-	
+	.button {
+		border: 1px solid #f5f5f5;
+	}
 </style>

@@ -79,6 +79,7 @@ export default {
 	},
 	methods: {
 		aa:function(){
+			this.tips=this.contents;
 			if (this.show)
 				this.show=false;
 			else{

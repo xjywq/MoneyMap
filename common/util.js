@@ -67,7 +67,6 @@ function get_storage_out(user_name) {
 	try {
 		select_out = uni.getStorageSync(user_name+"_out");
 		if (!select_out) {
-			console.log('nothing out ' + user_name);
 			select_out = ["餐饮", "购物", "日用", "交通", "其他"];
 		}
 	} catch (e) {
@@ -88,7 +87,6 @@ function get_storage_out(user_name) {
 			});
 		}
 	}
-	console.log(dic_out[0]['value']);
 	return dic_out
 };
 
@@ -96,7 +94,6 @@ function get_storage_in(user_name) {
 	try {
 		select_in = uni.getStorageSync(user_name+"_in");
 		if (!select_in) {
-			console.log('nothing in ' + user_name);
 			select_in = ["工资", "兼职", "理财", "其他"];
 		}
 	} catch (e) {
@@ -117,7 +114,6 @@ function get_storage_in(user_name) {
 			});
 		}
 	}
-	console.log(dic_in[0]['value']);
 	return dic_in
 };
 

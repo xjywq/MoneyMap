@@ -9,56 +9,16 @@
 					<form @submit="formSubmit" @reset="formReset" ref="submit_form">
 						<view class="uni-form-item uni-column">
 							<view class="title">价格</view>
-							<input class="uni-input" v-model="price" number="true" name="price" focus
+							<input class="uni-input" v-model="price" number="true" name="price" type="number" focus
 								placeholder="请输入价格" />
 						</view>
-						<view class="uni-form-item uni-column">
+						<view class="uni-form-item uni-column tabs">
 							<view class="title">标签</view>
 							<radio-group name="tag">
 								<view class="uni-list-cell" v-for="item in select_out">
 									<view>
-										<radio id="item.value" :value="item['value']" :checked="item['checked']"></radio>
-										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
-									</view>
-									<label class="label-2-text">
-										<text>{{item['value']}}</text>
-									</label>
-								</view>
-							</radio-group>
-						</view>
-						<view class="uni-form-item uni-column">
-							<view class="title">必要</view>
-							<view>
-								<switch name="isimportant" checked="true" />
-							</view>
-						</view>
-						<view class="uni-form-item uni-column">
-							<view class="title">备注</view>
-							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
-						</view>
-						<view class="uni-btn-v" >
-							<button type="success" class="elbtn" form-type="submit" style="font-size: 30rpx;">确认</button>
-							<button type="info" class="elbtn" @click="formReset" style="font-size: 30rpx;">返回</button>
-						</view>
-					</form>
-				</view>
-			</swiper-item>
-			<swiper-item>
-				<view class="uni-header-text">
-					<text>收入</text>
-				</view>
-				<view class="uni-padding-wrap uni-common-mt">
-					<form @submit="formSubmit1" @reset="formReset" ref="submit_form">
-						<view class="uni-form-item uni-column">
-							<view class="title">价格</view>
-							<input class="uni-input" v-model="price" number="true" name="price" placeholder="请输入价格" />
-						</view>
-						<view class="uni-form-item uni-column">
-							<view class="title">标签</view>
-							<radio-group name="tag">
-								<view class="uni-list-cell" v-for="item in select_in">
-									<view>
-										<radio id="item.value" :value="item['value']" :checked="item['checked']"></radio>
+										<radio id="item.value" :value="item['value']" :checked="item['checked']">
+										</radio>
 										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
 									</view>
 									<label class="label-2-text">
@@ -78,9 +38,67 @@
 							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
 						</view>
 						<view class="uni-btn-v">
-							<button class="elbtn" type="success" form-type="submit" style="font-size: 30rpx;">确认</button>
-							<button class="elbtn" type="success" @click="formdel" style="font-size: 30rpx;">删除</button>
-							<button class="elbtn" type="info" form-type="reset" style="font-size: 30rpx;">返回</button>
+							<button type="success" class="elbtn" form-type="submit"
+								style="background-color: #33cc33;">确认</button>
+						</view>
+						<view class="uni-btn-v">
+							<button type="info" class="elbtn" @click="formReset"
+								style="background-color: #999999">返回</button>
+						</view>
+						<view class="uni-btn-v">
+							<button class="elbtn" type="success" @click="formdel"
+								style="background-color: #cc3333;">删除</button>
+						</view>
+					</form>
+				</view>
+			</swiper-item>
+			<swiper-item>
+				<view class="uni-header-text">
+					<text>收入</text>
+				</view>
+				<view class="uni-padding-wrap uni-common-mt">
+					<form @submit="formSubmit1" @reset="formReset" ref="submit_form">
+						<view class="uni-form-item uni-column">
+							<view class="title">价格</view>
+							<input class="uni-input" v-model="price" number="true" name="price" type="number"
+								placeholder="请输入价格" />
+						</view>
+						<view class="uni-form-item uni-column tabs">
+							<view class="title">标签</view>
+							<radio-group name="tag">
+								<view class="uni-list-cell" v-for="item in select_in">
+									<view>
+										<radio id="item.value" :value="item['value']" :checked="item['checked']">
+										</radio>
+										<image class="category" mode="widthFix" :src="img_src[item['value']]" />
+									</view>
+									<label class="label-2-text">
+										<text>{{item['value']}}</text>
+									</label>
+								</view>
+							</radio-group>
+						</view>
+						<view class="uni-form-item uni-column">
+							<view class="title">必要</view>
+							<view>
+								<switch name="isimportant" checked="true" />
+							</view>
+						</view>
+						<view class="uni-form-item uni-column">
+							<view class="title">备注</view>
+							<input class="uni-input" v-model="comment" name="comment" placeholder="备注" />
+						</view>
+						<view class="uni-btn-v">
+							<button type="success" class="elbtn" form-type="submit"
+								style="background-color: #33cc33;">确认</button>
+						</view>
+						<view class="uni-btn-v">
+							<button type="info" class="elbtn" @click="formReset"
+								style="background-color: #999999">返回</button>
+						</view>
+						<view class="uni-btn-v">
+							<button class="elbtn" type="success" @click="formdel"
+								style="background-color: #cc3333;">删除</button>
 						</view>
 					</form>
 				</view>
@@ -103,11 +121,16 @@
 
 	export default {
 		onLoad(e) {
-			this.id = e.id;
-			console.log(this.id)
+			this.rec = JSON.parse(e.record);
+			this.id = this.rec['id'];
+			this.price = this.rec['price'];
+			this.tag = this.rec['tags'];
+			this.date = (new Date()).format('YYYY-MM-DD hh:mm');
+			this.comment = this.rec['comment'];
+			this.isimportant = this.rec['isimportant'];
+			this.time = this.rec['time'];
 		},
 		data() {
-			var date = new Date();
 			var db = 'moneymap'
 			var table_name = uni.getStorageSync('uni-id');
 			if (table_name == '') {
@@ -115,11 +138,6 @@
 			};
 			var global_setting = require("../../global setting.json");
 			return {
-				price: '',
-				tag: '',
-				date: date.format('YYYY-MM-DD hh:mm'),
-				comment: '',
-				isimportant: true,
 				income: 0,
 				db: db,
 				table_name: table_name,
@@ -252,14 +270,27 @@
 		width: 300rpx;
 		height: 60rpx;
 		line-height: 45rpx;
-		font-size: 30rpx;
+		font-size: 35rpx;
+		text-align: center;
 	}
 
 	.uni-btn-v {
 		text-align: center;
+		display: flex;
+		/*设置显示样式**/
+		align-items: center;
+		/**子view垂直居中*/
+		justify-content: center;
+		/**内容居中*/
+		margin: 0 0 0 0;
+		padding: 0 0 0 0;
 	}
 
 	.category {
 		width: 50rpx;
+	}
+
+	.tabs {
+		height: 400rpx;
 	}
 </style>

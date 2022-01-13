@@ -61,6 +61,22 @@ export function selectSQL(table_name, sql) {
 		}
 	});
 }
+
+
+export function checktable(db, table_name) {
+	plus.sqlite.selectSql({
+		name: db,
+		sql: 'select 1 from ' + table_name,
+		success: function(e) {
+			return true;
+		},
+		fail: function(e) {
+			console.warn('查询表失败: ' + JSON.stringify(e));
+			return false;
+		}
+	});
+}
+
 // 删除表
 export function droptable(db, table_name) {
 	console.log('drop table ' + table_name)
@@ -157,7 +173,7 @@ export function moveTable(db, table_name1, table_name2) {
 		name: db,
 		sql: 'insert into ' + table_name1 + ' select * from ' + table_name2,
 		success: function(e) {
-			droptable(db, table_name2);
+			// droptable(db, table_name2);
 			// console.log('转移数据成功');
 		},
 		fail: function(e) {
